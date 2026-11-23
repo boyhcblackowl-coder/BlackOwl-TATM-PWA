@@ -49,7 +49,7 @@
    return `<section class="live-overview ${compact?'compact':''}" id="liveOverview">
       <div class="live-top"><div><div class="section-cap">LIVE DATA • LOOKER STUDIO</div>
       <h2>Dashboard Overview</h2><p>Melihat report aktual TA & TM dalam PWA. Data dan refresh tetap mengikuti Looker Studio.</p></div>
-      <span class="live-pill"><i></i> Terhubung ke report</span></div>
+      <span class="live-pill"><i></i> Sumber: Looker Studio</span></div>
       <div class="live-controls"><div class="live-tabs" role="group" aria-label="Pilih dashboard">
         <button type="button" class="live-tab active" data-live-report="recruitment">Talent Acquisition</button>
         <button type="button" class="live-tab" data-live-report="branding">Employer Branding</button>
