@@ -1,5 +1,6 @@
 /* Public navigation only. Never place API secrets or employee records here. */
 window.BO_CONFIG = Object.freeze({
+  "chatUrl": "",
   "workspaceUrl": "https://script.google.com/macros/s/AKfycbxBtL9ICf2b7G8pIlUqdzBZH4yEPAklTRr8dKXBlU3uF_1HHsYAwkz5VihWJD9Yq1aAxg/exec",
   "asanaMomUrl": "https://app.asana.com/1/1184897653019384/project/1203625569754693/task/1210517627492639?focus=true",
   "looker": {
