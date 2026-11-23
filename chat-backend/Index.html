@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base target="_blank">
+<title>Black Owl — TA & TM Team Chat</title>
+<style>
+:root{color-scheme:dark;--bg:#101315;--panel:#1b2023;--edge:#343d42;--gold:#d7b97c;--text:#f5f2ec;--muted:#acb7bc}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Arial,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.app{height:100dvh;min-height:320px;display:flex;flex-direction:column}
+.head{padding:13px 15px;border-bottom:1px solid var(--edge);display:flex;justify-content:space-between;gap:9px;align-items:center}
+.head b{font-size:14px}.head small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#58d4a3;margin-right:6px}
+.refresh{background:#262c30;border:1px solid var(--edge);color:var(--gold);padding:7px 11px;border-radius:8px}
+.log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:11px;overscroll-behavior:contain}
+.bubble{max-width:85%;align-self:flex-start;background:#242a2f;border:1px solid #353d43;border-radius:13px 13px 13px 3px;padding:10px 12px;word-break:break-word}
+.bubble.me{align-self:flex-end;background:#413420;border-color:#75613f;border-radius:13px 13px 3px 13px}
+.sender{font-size:10px;color:var(--gold);font-weight:bold}.when{font-size:9px;color:#a2a4a3;margin-top:6px}.msg{white-space:pre-wrap;line-height:1.45;font-size:12px;margin-top:5px}
+.empty{align-self:center;text-align:center;margin:auto;color:#afb9bf;font-size:12px;line-height:1.7;max-width:300px}
+.form{display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--edge);padding:12px;background:var(--panel)}
+textarea{flex:1;min-width:0;resize:none;border-radius:10px;border:1px solid #414b50;background:#101417;color:#fff;padding:10px 12px;line-height:1.4;font-size:12px;min-height:42px;max-height:95px}
+button.send{background:var(--gold);color:#251e13;font-weight:800;border:0;border-radius:10px;padding:12px}
+button:disabled{opacity:.5}#status{font-size:10px;color:#e5b98c;padding:0 14px 8px;min-height:20px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="head"><div><b><span class="dot"></span>TA & TM Team Chat</b><small id="who">Menghubungkan akun Google...</small></div><button class="refresh" id="refresh" aria-label="Refresh">↻</button></header>
+  <main class="log" id="messages"><div class="empty">Mengambil percakapan tim...</div></main>
+  <div id="status" role="status"></div>
+  <form class="form" id="form"><textarea id="message" maxlength="1500" rows="1" placeholder="Tulis pesan ke tim..." aria-label="Pesan" disabled></textarea><button class="send" id="send" type="submit" disabled>Kirim</button></form>
+</div>
+<script>
+(function(){
+  const log=document.getElementById('messages'), form=document.getElementById('form');
+  const box=document.getElementById('message'), btn=document.getElementById('send');
+  const who=document.getElementById('who'), status=document.getElementById('status');
+  let user='', busy=false, ready=false, signature='';
+  const err=e=>{status.textContent=(e&&e.message)||String(e)||'Koneksi gagal';};
+  const stamp=s=>{try{return new Date(s).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jakarta'});}catch(e){return '';}};
+  function display(data){
+    ready=true;user=data.viewer.email;box.disabled=false;btn.disabled=false;
+    who.textContent='Akun Google: '+user;
+    const sig=JSON.stringify((data.messages||[]).map(x=>x.id));
+    if(sig===signature)return;
+    signature=sig;
+    log.replaceChildren();
+    if(!(data.messages||[]).length){
+      const empty=document.createElement('div');empty.className='empty';
+      empty.textContent='Belum ada percakapan. Kirim pesan pertama ke tim.';
+      log.appendChild(empty);return;
+    }
+    for(const m of data.messages){
+      const row=document.createElement('div');
+      row.className='bubble'+(m.senderEmail===user?' me':'');
+      const name=document.createElement('div');name.className='sender';name.textContent=m.senderName;
+      const message=document.createElement('div');message.className='msg';message.textContent=m.text;
+      const time=document.createElement('div');time.className='when';time.textContent=stamp(m.at);
+      row.append(name,message,time);log.appendChild(row);
+    }
+    log.scrollTop=log.scrollHeight;
+  }
+  function load(){
+    if(busy||document.hidden)return;
+    if(!window.google||!google.script||!google.script.run){err(new Error('Buka melalui Web App Apps Script.'));return;}
+    google.script.run.withSuccessHandler(data=>{status.textContent='';display(data);})
+      .withFailureHandler(err).getTeamChatMessages();
+  }
+  form.addEventListener('submit',e=>{
+    e.preventDefault();if(!ready||busy)return;
+    const text=box.value.trim();if(!text)return;
+    busy=true;btn.disabled=true;status.textContent='Mengirim...';
+    google.script.run.withSuccessHandler(()=>{
+      box.value='';busy=false;btn.disabled=false;status.textContent='Pesan terkirim';load();
+    }).withFailureHandler(e=>{
+      busy=false;btn.disabled=false;err(e);
+    }).sendTeamChatMessage(text);
+  });
+  box.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();}});
+  document.getElementById('refresh').addEventListener('click',load);
+  load();
+  setInterval(load,8000);
+})();
+</script>
+</body>
+</html>
