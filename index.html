@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0C0D0F">
+  <meta name="description" content="Black Owl TA & TM — Projects, Dashboard, People & Team Workspace">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TA & TM">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>TA & TM Workspace | Black Owl</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icon-180.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./config.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div id="splash" class="splash" aria-live="polite">
+    <img src="./icon-192.png" alt="Black Owl">
+    <strong>BLACK OWL</strong>
+    <span>TA & TM WORKSPACE</span>
+    <div class="splash-loading" aria-hidden="true"></div>
+  </div>
+  <div id="app" class="app" hidden>
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="side-brand"><img src="./icon-64.png" alt="Logo Black Owl"><div><strong>BLACK OWL</strong><span>TA & TM WORKSPACE</span></div></div>
+      <div class="side-label">WORKSPACE</div>
+      <nav id="sideMenu"></nav>
+      <div class="side-footer">
+        <div class="side-footer-brand"><span class="status-dot"></span> Team Operations Hub</div>
+        <small>Faster. Smarter. Happier.</small>
+        <small>Powered by Black Owl People</small>
+      </div>
+    </aside>
+    <div class="main-layout">
+      <header class="topbar">
+        <div class="mobile-title"><img src="./icon-64.png" alt=""><strong>BLACK OWL <em>TA & TM</em></strong></div>
+        <div class="breadcrumb" id="breadcrumb">Workspace / Project Team TA & TM</div>
+        <div class="header-actions">
+          <span class="live-indicator"><span></span> Workspace</span>
+          <button type="button" id="installBtn" class="install-button" hidden>↓ Install App</button>
+          <button type="button" id="moreBtn" class="circle-button mobile-only" aria-label="Buka semua menu">☰</button>
+          <span class="header-avatar" aria-label="Black Owl">BO</span>
+        </div>
+      </header>
+      <main id="content" tabindex="-1"></main>
+      <footer class="desktop-footer"><span>BLACK OWL — Talent Acquisition & Talent Management</span><span>Internal team workspace</span></footer>
+    </div>
+  </div>
+  <nav class="bottom-nav" id="bottomNav" aria-label="Navigasi mobile" hidden></nav>
+  <div class="mobile-backdrop" id="mobileBackdrop" hidden></div>
+  <div class="mobile-drawer" id="mobileDrawer" aria-label="Semua menu" hidden><div class="drawer-head"><b>Menu Workspace</b><button id="closeDrawer" aria-label="Tutup menu">✕</button></div><nav id="drawerMenu"></nav></div>
+  <div id="toast" class="toast" hidden role="status"></div>
+</body>
+</html>
