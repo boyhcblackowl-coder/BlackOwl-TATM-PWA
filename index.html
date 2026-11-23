@@ -55,5 +55,26 @@
   <div class="mobile-backdrop" id="mobileBackdrop" hidden></div>
   <div class="mobile-drawer" id="mobileDrawer" aria-label="Semua menu" hidden><div class="drawer-head"><b>Menu Workspace</b><button id="closeDrawer" aria-label="Tutup menu">✕</button></div><nav id="drawerMenu"></nav></div>
   <div id="toast" class="toast" hidden role="status"></div>
+  <button id="chatLauncher" type="button" class="chat-launcher" aria-controls="chatPanel" aria-expanded="false" aria-label="Buka TA & TM Team Chat">
+    <span class="chat-bubble-icon" aria-hidden="true">☏</span><span>Team Chat</span>
+  </button>
+  <section id="chatPanel" class="chat-panel" aria-label="TA & TM Team Chat" hidden>
+    <header class="chat-panel-head">
+      <div class="chat-panel-title"><span class="chat-mini-logo">BO</span><div><b>TA & TM Team Chat</b><small id="chatStatus">Memeriksa koneksi...</small></div></div>
+      <button type="button" id="chatClose" aria-label="Tutup Chat">✕</button>
+    </header>
+    <div id="chatNotConfigured" class="chat-not-configured" hidden>
+      <div class="chat-empty-icon">✉</div>
+      <h3>Team Chat siap dipasang</h3>
+      <p>Mini chat sudah ada di PWA. Untuk saling mengirim pesan antaranggota tim, aktifkan Google Apps Script Team Chat terlebih dahulu.</p>
+      <p class="chat-small">Panduan konfigurasi tersedia di folder <b>chat-backend</b> pada repository GitHub.</p>
+      <a href="https://github.com/boyhcblackowl-coder/BlackOwl-TATM-PWA/tree/main/chat-backend" target="_blank" rel="noopener noreferrer">Lihat panduan aktivasi ↗</a>
+    </div>
+    <iframe id="chatFrame" class="chat-iframe" title="Black Owl TA & TM Team Chat" loading="lazy" hidden></iframe>
+    <div class="chat-panel-footer">
+      <small>Pesan tersimpan di Google Sheets setelah backend diaktifkan.</small>
+      <a id="chatOpen" href="#" target="_blank" rel="noopener noreferrer" hidden>Buka Chat ↗</a>
+    </div>
+  </section>
 </body>
 </html>
