@@ -96,3 +96,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
  .drawer-head button{background:#28231c;border:0;color:#fff;padding:10px 12px;border-radius:10px}
  .desktop-footer{display:none}.embed-shell iframe{min-width:750px}
 }
+
+@media(max-width:850px){.mobile-backdrop:not([hidden]){display:block}.mobile-drawer:not([hidden]){display:block}}
