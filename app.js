@@ -145,7 +145,7 @@ function overview(){
    const x={planner:["▤","Program Planner & Notes","Kelola rencana, PIC, status, program, quick notepad, foto dan video dokumentasi.",appUrl("planner"),"Buka Program Planner"],weeklymom:["☷","Weekly MoM","Baca notulen meeting mingguan, topik rapat dan tindak lanjut.",appUrl("weeklymom"),"Buka Weekly MoM"],workspace:["↗","Original TA & TM Workspace","Buka dashboard live dan seluruh modul Google Apps Script existing.",appUrl("projecthub"),"Buka Workspace"]}[route];
    content.innerHTML=head(x[1],x[2],"TEAM OPERATIONS")+`<section class="launch-card"><div class="launch-icon">${x[0]}</div><div class="section-cap" style="margin-top:18px">BLACK OWL INTERNAL TOOLS</div><h2>Your tools stay connected.</h2><p>${esc(x[2])}</p><div class="hero-actions">${href(x[3],x[4])}${route==="weeklymom"?href(C.asanaMomUrl,"Task Asana","button light"):""}<button class="button flat" data-route="projecthub">Kembali ke Project Hub</button></div><div class="launch-meta">Akses data dan penyimpanan tetap menggunakan backend existing serta hak akses Google/Asana.</div></section>`;
  }
- function render(){renderNav();if(page==="home")home();else if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);}
+ function render(){renderNav();if(page==="home")home();else if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();}
  function showDrawer(){$("#mobileDrawer").hidden=false;$("#mobileBackdrop").hidden=false;}
  function hideDrawer(){$("#mobileDrawer").hidden=true;$("#mobileBackdrop").hidden=true;}
 
