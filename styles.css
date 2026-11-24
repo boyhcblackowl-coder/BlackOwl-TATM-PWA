@@ -142,3 +142,43 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
  .chat-launcher{bottom:calc(78px + env(safe-area-inset-bottom,0px));right:14px;padding:12px 15px}
  .chat-panel{bottom:calc(140px + env(safe-area-inset-bottom,0px));right:10px;height:min(580px,calc(100dvh - 155px));width:min(380px,calc(100vw - 20px))}
 }
+
+
+/* Overview V3: original Black Owl dashboard presentation */
+.bo-overview{background:#0b0d0e;border:1px solid #373b3d;color:#fffdf7;border-radius:18px}
+.bo-overview-head{padding:22px 24px 17px;display:flex;justify-content:space-between;gap:18px;align-items:start;border-bottom:1px solid #303537}
+.bo-overview-head .section-cap{color:#d7b97c;margin-bottom:9px}
+.bo-overview-head h2{font-size:24px;font-weight:850;margin:0 0 9px;letter-spacing:-.4px}
+.bo-overview-head p{margin:0;font-size:12px;color:#a9b8c0;line-height:1.65}
+.bo-overview-tag{font-size:10px;font-weight:800;color:#cfe7d9;background:#11281d;border:1px solid #24533a;padding:9px 12px;border-radius:40px;white-space:nowrap}
+.bo-overview-controls{padding:15px 23px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.bo-overview .live-tabs{display:flex;gap:7px;flex-wrap:wrap}
+.bo-overview .live-tab{border:1px solid #3c4347;background:#181d20;color:#bccad1;font-size:11px;padding:10px 12px;border-radius:10px}
+.bo-overview .live-tab.active{background:#3c3221;color:#f5d7a2;border-color:#8a7148}
+.bo-overview .button.light{color:#dce6e9;background:#192024;border-color:#374248}
+.bo-overview .button.primary{color:#18140f;background:#d7b97c;border-color:#bb995e}
+.bo-overview-iframe-viewport{background:#07090a;position:relative;overflow:hidden;min-height:100px;height:1260px}
+.bo-overview-iframe-viewport iframe{border:0;display:block;max-width:none;height:1260px;background:#07090a}
+.bo-overview.original-mode .bo-overview-iframe-viewport iframe{width:calc(100% + 270px);transform:translateX(-270px)}
+.bo-overview.looker-mode .bo-overview-iframe-viewport{overflow-x:auto;height:970px}
+.bo-overview.looker-mode .bo-overview-iframe-viewport iframe{width:100%;min-width:900px;height:970px;transform:none}
+.bo-overview.compact .bo-overview-iframe-viewport{height:740px}
+.bo-overview.compact .bo-overview-iframe-viewport iframe{height:740px}
+.bo-overview.compact.looker-mode .bo-overview-iframe-viewport{height:625px}
+.bo-overview.compact.looker-mode .bo-overview-iframe-viewport iframe{height:625px}
+.bo-overview-help{padding:13px 22px 17px;border-top:1px solid #373e40;color:#abc0c8;font-size:11px;line-height:1.65;display:grid;gap:5px}
+.bo-overview-help b{color:#e2bd7c}
+@media(max-width:850px){
+  .bo-overview-head{padding:17px 15px 14px;display:block}
+  .bo-overview-head h2{font-size:21px}
+  .bo-overview-tag{display:inline-block;margin-top:12px}
+  .bo-overview-controls{padding:12px 13px}
+  .bo-overview .live-tab{font-size:10px;padding:8px 9px}
+  .bo-overview-iframe-viewport{height:1080px}
+  .bo-overview-iframe-viewport iframe{height:1080px}
+  .bo-overview.original-mode .bo-overview-iframe-viewport{overflow-x:auto}
+  .bo-overview.original-mode .bo-overview-iframe-viewport iframe{transform:none;width:100%;min-width:0}
+  .bo-overview.compact .bo-overview-iframe-viewport,.bo-overview.compact .bo-overview-iframe-viewport iframe{height:560px}
+  .bo-overview.looker-mode .bo-overview-iframe-viewport iframe{min-width:760px}
+  .bo-overview-help{padding:13px 15px}
+}
