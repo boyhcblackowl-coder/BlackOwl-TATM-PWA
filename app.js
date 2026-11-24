@@ -45,59 +45,75 @@
  const head=(title,sub,tag)=>`<div class="section-cap">BLACK OWL • ${esc(tag)}</div><div class="page-heading"><div><h1 class="page-title">${esc(title)}</h1><p class="page-copy">${esc(sub)}</p></div><span class="tag">● Team Workspace</span></div>`;
 
  function overviewWidget(compact=false){
-  const dashboardUrl=appUrl("overview");
-  return `<section class="live-overview bo-overview ${compact?'compact':''} original-mode" id="liveOverview">
-    <header class="bo-overview-head">
-      <div><div class="section-cap">BLACK OWL • LIVE MANAGEMENT DATA MART</div>
-      <h2>TA & TM — Overview</h2>
-      <p>Program Spotlight, dokumentasi kegiatan, filter periode dan 12 KPI live dari Workspace Black Owl.</p></div>
-      <span class="bo-overview-tag">● Original Live Dashboard</span>
-    </header>
-    <div class="bo-overview-controls">
-      <div class="live-tabs" role="group" aria-label="Pilih sumber dashboard">
-        <button type="button" class="live-tab active" data-live-report="original" aria-pressed="true">Overview Lengkap</button>
-        <button type="button" class="live-tab" data-live-report="recruitment">Talent Acquisition</button>
-        <button type="button" class="live-tab" data-live-report="branding">Employer Branding</button>
-        <button type="button" class="live-tab" data-live-report="culture">People Culture</button>
+ const src=appUrl("overview");
+ const purl=appUrl("planner");
+ const kpis=[
+   "Total MP Request","Fulfilled Request","Hiring GAP","Fulfillment Rate",
+   "Published Content","Total Reach","Total Engagement","Applications In",
+   "Activities Completed","Participation Rate","Activity Budget","Actual Cost"
+ ];
+ return `<section class="bo-view ${compact?"compact":""}" id="liveOverview">
+   <div class="bo-view-head"><div><div class="section-cap">BLACK OWL • MANAGEMENT OVERVIEW</div><h2>TA & TM — Dashboard Overview</h2>
+   <p>Ringkasan kerja tim, dokumentasi kegiatan dan monitoring KPI.</p></div>
+   <span class="bo-view-status">● Sumber Data Internal</span></div>
+   <div class="bo-view-tabs"><div class="live-tabs" role="group" aria-label="Pilih dashboard">
+     <button type="button" class="live-tab active" data-live-report="original" aria-pressed="true">Overview Lengkap</button>
+     <button type="button" class="live-tab" data-live-report="recruitment" aria-pressed="false">Talent Acquisition</button>
+     <button type="button" class="live-tab" data-live-report="branding" aria-pressed="false">Employer Branding</button>
+     <button type="button" class="live-tab" data-live-report="culture" aria-pressed="false">People Culture</button>
+   </div><a class="button primary small" id="liveReportLink" href="${esc(src)}" target="_blank" rel="noopener noreferrer">Buka Data Live ↗</a></div>
+   <div id="boNativeContent" class="bo-native-content">
+      <div class="bo-native-columns">
+        <article class="bo-native-spotlight">
+           <div class="bo-native-photo"><div class="bo-native-photo-inner"><span class="bo-photo-mark">◉</span>
+             <span class="bo-mini-tag">PROGRAM SPOTLIGHT</span><h3>Dokumentasi kegiatan tim</h3>
+             <p>Foto dan video asli tetap tersimpan di Program Planner. Untuk melihat galeri terbaru secara live, buka dashboard internal.</p>
+             <div class="bo-action-row"><a href="${esc(src)}" target="_blank" rel="noopener noreferrer">Lihat Spotlight Live ↗</a>
+             <a href="${esc(purl)}" target="_blank" rel="noopener noreferrer">Program Planner ↗</a></div></div></div>
+        </article>
+        <article class="bo-native-updates"><div class="bo-native-updates-title"><h3>Update Program Terbaru</h3><span>Source: Program Planner</span></div>
+          <div class="bo-update-row"><b>Progress dan status program</b><p>Daftar program terbaru terbaca langsung di Workspace internal.</p>
+          <a href="${esc(src)}" target="_blank" rel="noopener noreferrer">Buka update program ↗</a></div>
+          <div class="bo-update-row"><b>Foto dan dokumentasi</b><p>Galeri mengikuti file yang di-upload anggota tim.</p>
+          <a href="${esc(purl)}" target="_blank" rel="noopener noreferrer">Lihat dokumentasi ↗</a></div>
+          <div class="bo-update-row"><b>Notepad dan planning tim</b><p>Catatan dan rencana kerja tetap tersedia di Program Planner.</p>
+          <a href="${esc(purl)}" target="_blank" rel="noopener noreferrer">Lihat planning ↗</a></div>
+        </article>
       </div>
-      <div class="live-actions">
-        <button type="button" class="button light small" id="refreshLiveFrame">↻ Refresh</button>
-        <a class="button primary small" id="liveReportLink" href="${esc(dashboardUrl)}" target="_blank" rel="noopener noreferrer">Buka Dashboard Asli ↗</a>
-      </div>
-    </div>
-    <div class="bo-overview-iframe-viewport" id="boOverviewViewport">
-      <iframe id="liveReportFrame" title="Black Owl TA & TM Overview — Original Live Dashboard"
-        src="${esc(dashboardUrl)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-    <div class="bo-overview-help">
-      <span>Data tetap dibaca dari Apps Script, Program Planner dan Management Data Mart — bukan angka screenshot.</span>
-      <span>Jika area gelap, kosong, atau “refused to connect”, Google mungkin memblokir iframe. Gunakan <b>Buka Dashboard Asli</b>. Tampilan native penuh memerlukan integrasi API terautentikasi.</span>
-    </div>
-  </section>`;
+      <div class="bo-period-info"><span>▦ Filter Periode • Tersedia di dashboard asli</span><a href="${esc(src)}" target="_blank" rel="noopener noreferrer">Atur tanggal & refresh KPI ↗</a></div>
+      <div class="bo-kpi-grid">${kpis.map(name=>`<article class="bo-kpi-card"><span>${esc(name)}</span><strong>—</strong><small>Angka live tersedia di dashboard asli</small></article>`).join("")}</div>
+      <div class="bo-connect-note"><span class="bo-connect-icon">ⓘ</span><span><b>Mengapa KPI di PWA belum terisi?</b> GitHub Pages tidak bisa langsung membaca data Google Sheets dan Apps Script yang dilindungi izin Google. Data tidak dipublikasikan agar tetap aman. Gunakan <b>Buka Data Live</b> untuk angka, filter, dan foto aktual, atau hubungkan API terautentikasi agar semuanya native di PWA.</span></div>
+   </div>
+   <div class="bo-looker-content" id="boLookerContent" hidden>
+     <div class="bo-looker-controls"><b>Report Looker Studio</b><button type="button" class="button light small" id="refreshLiveFrame">↻ Refresh report</button></div>
+     <div class="live-frame-scroll"><iframe id="liveReportFrame" title="Looker Studio" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+     <div class="live-caption">Report mengambil data sesuai koneksi, izin akun, dan kebijakan refresh Looker Studio. Jika embed ditolak, klik Buka Report.</div>
+   </div>
+ </section>`;
 }
 
 function setLiveReport(mode){
-  const shell=document.getElementById("liveOverview");
-  if(!shell)return;
-  const isOriginal=mode==="original";
-  const source=isOriginal?{embed:appUrl("overview"),view:appUrl("overview")}:C.looker[mode];
-  if(!source)return;
-  const frame=shell.querySelector("#liveReportFrame");
-  frame.src=source.embed;
-  frame.title=isOriginal?"Black Owl TA & TM Overview — Original Live Dashboard":mode==="recruitment"?"Talent Acquisition — Looker Studio":mode==="branding"?"Employer Branding — Looker Studio":"People Culture — Looker Studio";
-  const link=shell.querySelector("#liveReportLink");
-  link.href=source.view;
-  link.textContent=isOriginal?"Buka Dashboard Asli ↗":"Buka Report ↗";
-  shell.classList.toggle("original-mode",isOriginal);
-  shell.classList.toggle("looker-mode",!isOriginal);
-  shell.querySelectorAll("[data-live-report]").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.liveReport===mode);
-    btn.setAttribute("aria-pressed",String(btn.dataset.liveReport===mode));
-  });
+ const shell=document.getElementById("liveOverview");if(!shell)return;
+ const isOriginal=mode==="original";
+ const data=isOriginal?{view:appUrl("overview")}:C.looker[mode];
+ if(!data)return;
+ const native=shell.querySelector("#boNativeContent"), loooker=shell.querySelector("#boLookerContent");
+ native.hidden=!isOriginal;loooker.hidden=isOriginal;
+ shell.querySelectorAll("[data-live-report]").forEach(btn=>{
+   btn.classList.toggle("active",btn.dataset.liveReport===mode);
+   btn.setAttribute("aria-pressed",String(btn.dataset.liveReport===mode));
+ });
+ const a=shell.querySelector("#liveReportLink");a.href=data.view;
+ a.textContent=isOriginal?"Buka Data Live ↗":"Buka Report ↗";
+ if(!isOriginal){
+   const frame=shell.querySelector("#liveReportFrame");
+   frame.src=data.embed;
+   frame.title=mode==="recruitment"?"Talent Acquisition":mode==="branding"?"Employer Branding":"People Culture";
+ }
 }
 
 function overview(){
-  content.innerHTML=head("Dashboard Overview","Pantau Program Spotlight, update tim, filter periode dan KPI live dalam satu tampilan.","MANAGEMENT OVERVIEW")+overviewWidget(false);
+ content.innerHTML=head("Dashboard Overview","Program Spotlight, update kegiatan, filter periode dan 12 KPI dalam satu workspace.","TA & TM OVERVIEW")+overviewWidget(false);
 }
 
  function home(){
