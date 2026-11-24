@@ -14,7 +14,7 @@
  {id:"talent",name:"Black Owl Talent Hub",kind:"Web App",cat:"Recruitment Tools",icon:"🎯",desc:"Talent sourcing dan workflow rekrutmen tim TA & TM.",url:"https://script.google.com/macros/s/AKfycbxgVwR8Trri5Fg_MEyoPzKAzHhMsOxX_vl0eciyylm2PS460aJv2gGTIYgcxH1widHNlw/exec"}
  ];
  const nav=[
- {id:"home",name:"Home",symbol:"⌂"},{id:"overview",name:"Live Dashboard",symbol:"▦"},{id:"projecthub",name:"Project Team TA & TM",symbol:"◫"},
+ {id:"overview",name:"Main Dashboard",symbol:"▦"},{id:"projecthub",name:"Project Team TA & TM",symbol:"◫"},
  {id:"recruitment",name:"Talent Acquisition",symbol:"♧"},{id:"branding",name:"Employer Branding",symbol:"◈"},
  {id:"culture",name:"People Culture",symbol:"♡"},{id:"planner",name:"Program Planner & Notes",symbol:"▤"},
  {id:"weeklymom",name:"Weekly MoM",symbol:"☷"},{id:"workspace",name:"Original Workspace",symbol:"↗"}
@@ -22,14 +22,14 @@
  const routes=new Set(nav.map(n=>n.id));
  const $=sel=>document.querySelector(sel);
  const content=$("#content");
- let page="projecthub", search="", category="Semua kategori", installPrompt=null, toastTimer=null;
+ let page="overview", search="", category="Semua kategori", installPrompt=null, toastTimer=null;
  const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const href=(url,label,cls="button primary")=>`<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} <span aria-hidden="true">↗</span></a>`;
  const appUrl=id=>{const u=new URL(C.workspaceUrl);u.searchParams.set("page",id);u.hash=id;return u.toString();};
- const routeFromLocation=()=>{const p=new URLSearchParams(location.search).get("page")||location.hash.slice(1);return routes.has(p)?p:"projecthub";};
+ const routeFromLocation=()=>{const p=new URLSearchParams(location.search).get("page")||location.hash.slice(1);return p==="home"?"overview":routes.has(p)?p:"overview";};
  function toast(txt){const t=$("#toast");t.textContent=txt;t.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.hidden=true,3500);}
  function go(to,replace=false){
-   page=routes.has(to)?to:"projecthub";
+   page=to==="home"?"overview":routes.has(to)?to:"overview";
    const u=new URL(location.href);u.searchParams.set("page",page);u.hash=page;
    (replace?history.replaceState:history.pushState).call(history,{page},"",u.toString());
    render();window.scrollTo(0,0);hideDrawer();
@@ -37,7 +37,7 @@
  function renderNav(){
    const n=nav.map(x=>`<button type="button" data-route="${x.id}" class="nav-link ${page===x.id?"active":""}" ${page===x.id?'aria-current="page"':""}><span class="symbol" aria-hidden="true">${x.symbol}</span><span>${esc(x.name)}</span></button>`).join("");
    $("#sideMenu").innerHTML=n;$("#drawerMenu").innerHTML=n;
-   const bottom=[["overview","Live","▦"],["projecthub","Projects","◫"],["recruitment","Hiring","♧"],["planner","Planner","▤"]];
+   const bottom=[["overview","Main Dashboard","▦"],["projecthub","Projects","◫"],["recruitment","Hiring","♧"],["planner","Planner","▤"]];
    $("#bottomNav").innerHTML=bottom.map(x=>`<button class="bottom-item ${page===x[0]?"active":""}" data-route="${x[0]}"><span class="b-icon">${x[2]}</span>${x[1]}</button>`).join("")+'<button class="bottom-item" id="bottomMore"><span class="b-icon">☷</span>More</button>';
    $("#breadcrumb").textContent="Workspace / "+(nav.find(x=>x.id===page)?.name||"Project Hub");
    document.title=(nav.find(x=>x.id===page)?.name||"Workspace")+" | Black Owl TA & TM";
@@ -112,14 +112,9 @@ function setLiveReport(mode){
 }
 
 function overview(){
- content.innerHTML=head("Dashboard Overview","Program Spotlight, update kegiatan, filter periode dan 12 KPI dalam satu workspace.","TA & TM OVERVIEW")+overviewWidget(false);
+ content.innerHTML=head("Main Dashboard","Program Spotlight, update kegiatan, filter periode dan 12 KPI dalam satu workspace.","TA & TM OVERVIEW")+overviewWidget(false);
 }
 
- function home(){
-   const cards=[["◫","Project Team TA & TM","10 shortcut project digital.","projecthub"],["♧","Talent Acquisition","Dashboard fulfillment dan hiring.","recruitment"],["▤","Program Planner","Rencana dan progres program.","planner"],["☷","Weekly MoM","Arsip meeting dan follow-up.","weeklymom"]];
-   content.innerHTML=`<section class="hero"><div class="section-cap">THE DIGITAL WORKSPACE OF TA & TM</div><div class="hero-text"><h1>All your projects.<br>One powerful workspace.</h1><p>Akses cepat sistem, data, dashboard, dan program kerja tim Black Owl dalam satu aplikasi — tanpa login tambahan.</p><div class="hero-actions"><button class="button primary" data-route="projecthub">Explore Projects ↗</button>${href(appUrl("overview"),"Live Dashboard","button secondary")}</div></div></section><div class="block-title"><div><h2>Everything in one place</h2><p>Tool utama untuk pekerjaan tim setiap hari.</p></div></div><section class="module-grid">${cards.map(c=>`<button class="module-card" data-route="${c[3]}" style="text-align:left;color:inherit"><span class="mod-icon">${c[0]}</span><h3>${esc(c[1])}</h3><p>${esc(c[2])}</p><span class="mod-foot">Open module ↗</span></button>`).join("")}</section><div class="info-band">PWA ini tidak mempunyai login tersendiri. Dokumen dan aplikasi internal tetap mengikuti izin akun Google atau Asana masing-masing.</div>`;
-   content.querySelector(".hero").insertAdjacentHTML("afterend",overviewWidget(true));
- }
  function projectCard(p){return `<article class="project-card"><div class="project-head"><div class="project-icon">${p.icon}</div><span class="project-type">${esc(p.kind)}</span></div><h3>${esc(p.name)}</h3><div class="project-meta">${esc(p.cat)}</div><p>${esc(p.desc)}</p><div class="project-actions">${href(p.url,"Buka Project","button primary small")}<button class="copy-btn" data-copy="${p.id}" aria-label="Salin link ${esc(p.name)}">⧉ Salin link</button></div></article>`;}
  function filterProjects(){
    const v=projects.filter(p=>(category==="Semua kategori"||category===p.cat)&&(!search||[p.name,p.cat,p.kind,p.desc].join(" ").toLowerCase().includes(search.toLowerCase())));
@@ -128,7 +123,7 @@ function overview(){
  }
  function projecthub(){
    const cats=["Semua kategori",...new Set(projects.map(p=>p.cat))];
-   content.innerHTML=head("Project Team TA & TM","Akses seluruh sistem dan project digital tim, dalam satu tempat.","PROJECT DIRECTORY")+`<section class="hero"><div class="section-cap">ONE LINK. ALL PROJECTS.</div><div class="hero-text"><h1>Build smarter.<br>Work together.</h1><p>10 digital tools untuk recruitment, employee experience, people development, engagement, dan internal operations.</p><div class="hero-actions">${href(appUrl("overview"),"Open Live Dashboard")}<button class="button secondary" data-route="home">Workspace Home</button></div></div></section><div class="block-title"><div><h2>All Projects</h2><p>Langsung buka tools tanpa mencari link di chat.</p></div><span class="tag">${projects.length} Shortcuts</span></div><div class="filterbar"><label class="search-wrap"><span>⌕</span><input id="projectSearch" type="search" placeholder="Cari project, platform atau fungsi..." value="${esc(search)}"></label><select id="categoryFilter">${cats.map(c=>`<option value="${esc(c)}" ${c===category?"selected":""}>${esc(c)}</option>`).join("")}</select><span id="filterCount"></span></div><section id="projectGrid" class="project-grid"></section><div class="info-band">🔐 <b>Keamanan:</b> daftar shortcut ini dapat dibuka tanpa login PWA. Konten dokumen, dashboard, dan Asana tetap mengikuti izin masing-masing sistem.</div>`;
+   content.innerHTML=head("Project Team TA & TM","Akses seluruh sistem dan project digital tim, dalam satu tempat.","PROJECT DIRECTORY")+`<section class="hero"><div class="section-cap">ONE LINK. ALL PROJECTS.</div><div class="hero-text"><h1>Build smarter.<br>Work together.</h1><p>10 digital tools untuk recruitment, employee experience, people development, engagement, dan internal operations.</p><div class="hero-actions">${href(appUrl("overview"),"Buka Dashboard Asli")}<button class="button secondary" data-route="overview">Main Dashboard</button></div></div></section><div class="block-title"><div><h2>All Projects</h2><p>Langsung buka tools tanpa mencari link di chat.</p></div><span class="tag">${projects.length} Shortcuts</span></div><div class="filterbar"><label class="search-wrap"><span>⌕</span><input id="projectSearch" type="search" placeholder="Cari project, platform atau fungsi..." value="${esc(search)}"></label><select id="categoryFilter">${cats.map(c=>`<option value="${esc(c)}" ${c===category?"selected":""}>${esc(c)}</option>`).join("")}</select><span id="filterCount"></span></div><section id="projectGrid" class="project-grid"></section><div class="info-band">🔐 <b>Keamanan:</b> daftar shortcut ini dapat dibuka tanpa login PWA. Konten dokumen, dashboard, dan Asana tetap mengikuti izin masing-masing sistem.</div>`;
    $("#projectSearch").addEventListener("input",e=>{search=e.target.value;filterProjects();});
    $("#categoryFilter").addEventListener("change",e=>{category=e.target.value;filterProjects();});
    filterProjects();
@@ -170,7 +165,7 @@ function overview(){
    const x={planner:["▤","Program Planner & Notes","Kelola rencana, PIC, status, program, quick notepad, foto dan video dokumentasi.",appUrl("planner"),"Buka Program Planner"],weeklymom:["☷","Weekly MoM","Baca notulen meeting mingguan, topik rapat dan tindak lanjut.",appUrl("weeklymom"),"Buka Weekly MoM"],workspace:["↗","Original TA & TM Workspace","Buka dashboard live dan seluruh modul Google Apps Script existing.",appUrl("projecthub"),"Buka Workspace"]}[route];
    content.innerHTML=head(x[1],x[2],"TEAM OPERATIONS")+`<section class="launch-card"><div class="launch-icon">${x[0]}</div><div class="section-cap" style="margin-top:18px">BLACK OWL INTERNAL TOOLS</div><h2>Your tools stay connected.</h2><p>${esc(x[2])}</p><div class="hero-actions">${href(x[3],x[4])}${route==="weeklymom"?href(C.asanaMomUrl,"Task Asana","button light"):""}<button class="button flat" data-route="projecthub">Kembali ke Project Hub</button></div><div class="launch-meta">Akses data dan penyimpanan tetap menggunakan backend existing serta hak akses Google/Asana.</div></section>`;
  }
- function render(){renderNav();if(page==="home")home();else if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(page==="weeklymom")weeklyMom();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();if(window.BO_MOM)window.BO_MOM.mount();}
+ function render(){renderNav();if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(page==="weeklymom")weeklyMom();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();if(window.BO_MOM)window.BO_MOM.mount();}
  function showDrawer(){$("#mobileDrawer").hidden=false;$("#mobileBackdrop").hidden=false;}
  function hideDrawer(){$("#mobileDrawer").hidden=true;$("#mobileBackdrop").hidden=true;}
 
