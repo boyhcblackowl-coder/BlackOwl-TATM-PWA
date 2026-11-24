@@ -141,11 +141,37 @@ function overview(){
    content.innerHTML=head(l[0],l[1],"LOOKER STUDIO")+`<div class="embed-card"><div class="embed-bar"><b>${l[2]}</b><div class="embed-actions">${href(rep.view,"Buka Report","button primary small")}<button id="refreshReport" class="button light small">↻ Refresh</button></div></div><div class="embed-shell"><iframe id="lookerFrame" title="${esc(l[0])}" src="${esc(rep.embed)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><div class="embed-note">Jika report tidak tampil karena akses akun Google atau batasan iframe, klik “Buka Report” di atas. Filter periode mengikuti Looker Studio.</div></div>`;
    $("#refreshReport").addEventListener("click",()=>{$("#lookerFrame").src=rep.embed;toast("Memuat ulang Looker Studio...");});
  }
+
+ function weeklyMom(){
+   content.innerHTML=head("Weekly MoM","Arsip lengkap meeting mingguan TA & TM, langsung di PWA dengan akses Google yang diizinkan.","ASANA WEEKLY MEETING")+ `
+    <section id="momNative" class="mom-native" aria-label="Weekly MoM Notulen">
+      <div class="mom-topbar">
+        <div><span class="mom-eyebrow">BLACK OWL • TA & TM DEPARTMENT</span>
+        <h2>Minutes of Meeting</h2><p>Notulen Asana diarsipkan ke spreadsheet privat agar bisa dibaca dan dicari dalam satu workspace.</p></div>
+        <div class="mom-top-actions">
+          <button id="momConnect" class="button primary" type="button">Hubungkan Google</button>
+          <a class="button secondary" href="${esc(C.asanaMomUrl)}" target="_blank" rel="noopener noreferrer">Buka Asana ↗</a>
+        </div>
+      </div>
+      <div id="momStatus" class="mom-status" role="status">Menghubungkan notulen...</div>
+      <div class="mom-toolbar">
+        <label class="mom-search">⌕ <input id="momSearch" type="search" placeholder="Cari topik, tindak lanjut, atau PIC..." aria-label="Cari notulen"></label>
+        <select id="momMonth" aria-label="Filter bulan notulen"><option value="all">Semua bulan</option></select>
+        <span id="momCount">— notulen</span>
+      </div>
+      <div class="mom-layout">
+        <nav id="momList" class="mom-list" aria-label="Riwayat meeting"><p class="mom-empty">Hubungkan Google untuk memuat riwayat notulen.</p></nav>
+        <section id="momDetail" class="mom-detail" aria-label="Isi notulen"><p class="mom-empty">Pilih tanggal meeting dari daftar di samping.</p></section>
+      </div>
+      <p class="mom-disclaimer">Sumber: komentar task Asana • Ditampilkan dari tab privat Weekly_MoM di Program Planner • Catatan baru mengikuti jadwal sinkronisasi yang diaktifkan administrator.</p>
+    </section>`;
+ }
+
  function launch(route){
    const x={planner:["▤","Program Planner & Notes","Kelola rencana, PIC, status, program, quick notepad, foto dan video dokumentasi.",appUrl("planner"),"Buka Program Planner"],weeklymom:["☷","Weekly MoM","Baca notulen meeting mingguan, topik rapat dan tindak lanjut.",appUrl("weeklymom"),"Buka Weekly MoM"],workspace:["↗","Original TA & TM Workspace","Buka dashboard live dan seluruh modul Google Apps Script existing.",appUrl("projecthub"),"Buka Workspace"]}[route];
    content.innerHTML=head(x[1],x[2],"TEAM OPERATIONS")+`<section class="launch-card"><div class="launch-icon">${x[0]}</div><div class="section-cap" style="margin-top:18px">BLACK OWL INTERNAL TOOLS</div><h2>Your tools stay connected.</h2><p>${esc(x[2])}</p><div class="hero-actions">${href(x[3],x[4])}${route==="weeklymom"?href(C.asanaMomUrl,"Task Asana","button light"):""}<button class="button flat" data-route="projecthub">Kembali ke Project Hub</button></div><div class="launch-meta">Akses data dan penyimpanan tetap menggunakan backend existing serta hak akses Google/Asana.</div></section>`;
  }
- function render(){renderNav();if(page==="home")home();else if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();}
+ function render(){renderNav();if(page==="home")home();else if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(page==="weeklymom")weeklyMom();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();if(window.BO_MOM)window.BO_MOM.mount();}
  function showDrawer(){$("#mobileDrawer").hidden=false;$("#mobileBackdrop").hidden=false;}
  function hideDrawer(){$("#mobileDrawer").hidden=true;$("#mobileBackdrop").hidden=true;}
 
