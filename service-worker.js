@@ -1,5 +1,5 @@
 (function serviceWorker() {
- const KEY="bo-tatm-pwa-v3-original-overview";
+ const KEY="bo-tatm-pwa-v4-safe-overview";
  const ASSETS=["./","./index.html","./styles.css","./app.js","./config.js","./manifest.webmanifest","./icon-64.png","./icon-180.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./offline.html","./install-check.html"];
  self.addEventListener("install",e=>{e.waitUntil(caches.open(KEY).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));});
  self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("bo-tatm-")&&k!==KEY).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
