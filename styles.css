@@ -253,3 +253,33 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
  .bo-view .live-frame-scroll iframe{min-width:740px}
  .bo-view .live-caption{padding:13px}
 }
+
+
+/* Connected Sheets live dashboard native controls */
+.bo-live-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:11px;padding:16px;background:#151b1e;border:1px solid #364449;border-radius:14px;margin:18px 0 15px}
+.bo-live-title{min-width:170px;flex:1}.bo-live-title b{font-size:12px;color:#e7c889;letter-spacing:.06em}
+.bo-live-title small{font-size:10px;color:#a6bbc4;display:block;margin-top:5px;line-height:1.4}
+.bo-live-filters{display:flex;flex-wrap:wrap;align-items:end;gap:8px}
+.bo-live-filters label{color:#cbdce2;font-size:10px;display:grid;gap:6px}
+.bo-live-filters input{background:#0e1316;border:1px solid #35434a;border-radius:8px;padding:9px;color:#fff;font-size:11px;color-scheme:dark}
+.bo-live-filters button{border-radius:9px;padding:11px 13px;font-size:11px;font-weight:800;background:#d7b97c;color:#231d12;border:1px solid #a6854f;min-height:36px}
+.bo-live-filters button:first-of-type{background:#262f33;color:#e2eaed;border-color:#4b5c62}
+.bo-live-filters button:disabled{opacity:.55}
+.bo-live-state{width:100%;color:#efc184;background:#28251f;border:1px solid #63513a;padding:10px 12px;border-radius:8px;font-size:11px;line-height:1.6}
+.bo-live-state[data-state="ok"]{background:#13251c;color:#8ee0b3;border-color:#316246}
+.bo-live-state a{color:#f2d59b;text-decoration:underline;font-weight:750}
+.bo-update-title{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.bo-update-title b{min-width:0;overflow-wrap:anywhere}
+.bo-status{white-space:nowrap;padding:5px 8px;border:1px solid #6b5737;background:#342b20;color:#e6c488;border-radius:15px;font-weight:800;font-size:9px}
+.bo-native-photo{background-position:center;background-size:cover;transition:background-image .2s ease}
+.bo-spotlight-next{background:#403323;border:1px solid #a88a56;color:#f8d69e;border-radius:9px;padding:9px 12px;font-weight:750;font-size:11px}
+@media(max-width:850px){
+ .bo-live-toolbar{padding:12px;gap:12px}
+ .bo-live-title{width:100%}
+ .bo-live-filters{width:100%}
+ .bo-live-filters label{flex:1;min-width:125px}
+ .bo-live-filters input{width:100%}
+ .bo-live-filters button{flex:1}
+ .bo-live-state{font-size:10px}
+ .bo-update-title{align-items:start}
+}
