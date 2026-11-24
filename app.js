@@ -82,7 +82,6 @@
       </div>
       <div class="bo-period-info"><span>▦ Filter Periode • Tersedia di dashboard asli</span><a href="${esc(src)}" target="_blank" rel="noopener noreferrer">Atur tanggal & refresh KPI ↗</a></div>
       <div class="bo-kpi-grid">${kpis.map(name=>`<article class="bo-kpi-card"><span>${esc(name)}</span><strong>—</strong><small>Angka live tersedia di dashboard asli</small></article>`).join("")}</div>
-      <div class="bo-connect-note"><span class="bo-connect-icon">ⓘ</span><span><b>Mengapa KPI di PWA belum terisi?</b> GitHub Pages tidak bisa langsung membaca data Google Sheets dan Apps Script yang dilindungi izin Google. Data tidak dipublikasikan agar tetap aman. Gunakan <b>Buka Data Live</b> untuk angka, filter, dan foto aktual, atau hubungkan API terautentikasi agar semuanya native di PWA.</span></div>
    </div>
    <div class="bo-looker-content" id="boLookerContent" hidden>
      <div class="bo-looker-controls"><b>Report Looker Studio</b><button type="button" class="button light small" id="refreshLiveFrame">↻ Refresh report</button></div>
