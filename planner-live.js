@@ -246,6 +246,11 @@ function renderMedia(p){
    info.append(text,subtitle,link);item.append(info);media.append(item);
  }
 }
+async function logChange(action,id,title,detail){
+ if(!tokenValid()||!state.email)return false;
+ try{await api("'Change_Log'!A1:F1000","POST",[[now(),state.email,action,id,title,detail]],true);return true;}
+ catch(e){return false;}
+}
 async function saveProgram(e){
  e.preventDefault();if(state.saving)return;
  if(!tokenValid())return readStatus("Hubungkan Google sebelum menyimpan.");
@@ -274,8 +279,9 @@ async function saveProgram(e){
    ];
    if(existing){await api(`'Programs'!A${row}:T${row}`,"PUT",[updated]);}
    else{await api("'Programs'!A1:T1000","POST",[updated],true);}
+   const auditOK=await logChange(existing?"UPDATE":"CREATE",generatedId,values.title,`Status: ${values.status} | Version: ${existing?existing.version+1:1}`);
    closeModal();state.saving=false;
-   await refresh();readStatus(`Program "${values.title}" berhasil ${existing?"diperbarui":"ditambahkan"} oleh ${state.email}.`,true);
+   await refresh();readStatus(`Program "${values.title}" berhasil ${existing?"diperbarui":"ditambahkan"} oleh ${state.email}.${auditOK?"":" Catatan: Change_Log gagal dicatat."}`,true);
  }catch(err){readStatus("Gagal menyimpan program: "+(err.message||err));}
  finally{state.saving=false;btn.disabled=false;btn.textContent="Simpan Program";}
 }
@@ -294,9 +300,10 @@ async function saveNote(){
    }else{
      await api("'Quick_Notes'!A1:E1000","POST",[[workstream,content,now(),state.email,1]],true);
    }
+   const auditOK=await logChange("NOTEPAD_SAVE",workstream,"Team Quick Notepad",`Workstream: ${workstream} | Length: ${content.length}`);
    state.noteDirty=false;state.saving=false;
    await refresh();
-   readStatus("Quick Notepad "+workstream+" berhasil disimpan untuk tim.",true);
+   readStatus("Quick Notepad "+workstream+" berhasil disimpan untuk tim."+(auditOK?"":" Catatan: Change_Log gagal dicatat."),true);
  }catch(e){readStatus("Gagal menyimpan catatan: "+(e.message||e));}
  finally{state.saving=false;}
 }
@@ -337,6 +344,12 @@ function mount(){
  setup();renderSummary();renderMain();
  if(tokenValid())refresh();
  else readStatus("Klik Hubungkan Google untuk menampilkan program dan notes secara live.");
+ if(!state.refreshHandle)state.refreshHandle=setInterval(()=>{
+   if(!isActive()||!tokenValid()||state.saving||state.loading||state.noteDirty)return;
+   const modal=$("#plannerModal",state.root);
+   if(modal&&!modal.hidden)return;
+   if(document.visibilityState==="visible")refresh();
+ },90000);
 }
 window.BO_PLANNER={mount,connect,refresh};
 })();
