@@ -1,6 +1,6 @@
 /* Public navigation only. Never place API secrets or employee records here. */
 window.BO_CONFIG = Object.freeze({
-  "oauthClientId": "",
+  "oauthClientId": "902506629282-8n6vn8nrhghs1hfo90t8n839vekeuimb.apps.googleusercontent.com",
   "dataMartSheetId": "1QWwIfAww9d-UuS9UbGFhmhZ3Ai6AShwBaOHiXsOPGKQ",
   "plannerSheetId": "1xVJcCsnjubEIq8Sy9FcTp7wQV_i_pNnqfMab_Rpcq18",
   "chatUrl": "https://script.google.com/macros/s/AKfycbzJ3xsfQx2w1SxgJlGo0TpzqJXsz4MjSAYqzfTV74KQpZ0L7xkPgMNa5BOhA_pysAAY/exec",
