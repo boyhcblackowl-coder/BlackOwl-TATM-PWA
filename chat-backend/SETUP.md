@@ -45,3 +45,27 @@ Secara default tidak ada email yang diizinkan sampai Anda mengisi daftar ini. Ja
 - Browser tertentu membatasi Apps Script di dalam iframe eksternal. Tautan Buka Chat merupakan fallback yang tetap aman.
 - GitHub Pages repository ini publik. Jangan simpan data pribadi karyawan, token, API key rahasia, atau pesan di dalam file source repository.
 - Untuk chat enterprise penuh seperti LinkedIn/Messenger, pertimbangkan backend terautentikasi (Google Identity + Cloudflare Worker/D1 atau Firebase), bukan browser-only storage.
+
+## Mengatasi error "BO_CHAT_ALLOWED_EMAILS belum dikonfigurasi oleh administrator"
+
+Error ini bukan masalah URL `chatUrl` di GitHub. Artinya Web App sudah terhubung, tetapi properti allowlist di **project Apps Script Team Chat** masih kosong.
+
+1. Buka project Google Apps Script yang digunakan untuk URL chat `/exec` (bukan project Dashboard dan bukan repository GitHub).
+2. Klik **Project Settings** (ikon roda gigi di sidebar editor).
+3. Scroll ke **Script Properties**, klik **Add script property**.
+4. Isikan **Property** persis `BO_CHAT_ALLOWED_EMAILS` (huruf kapital dan underscore).
+5. Isikan **Value** berupa email akun Google tim yang diperbolehkan, dipisahkan koma, misalnya:
+   `pemilik@contoh.com,anggota1@contoh.com,anggota2@contoh.com`.
+   *Gunakan email asli tim; jangan menambahkan contoh tersebut secara literal.*
+6. Klik **Save script properties**. Pengaturan Script Properties ini dibaca runtime dan biasanya tidak memerlukan redeploy jika hanya Value yang diubah.
+7. Pastikan Google Sheets yang dibuat dari `setupTeamChat()` telah dibagikan sebagai **Editor** kepada email yang sama (karena `Execute as: User accessing the web app`).
+8. Refresh URL `/exec` chat dan coba tulis satu pesan. Jika masih gagal, periksa deployment `Execute as: User accessing the web app`, akses Google, dan otorisasi masing-masing anggota.
+
+**Admin saat ini:** pemilik project Apps Script adalah pengelola konfigurasi. Versi ini belum mempunyai menu UI Admin atau role moderator terpisah; daftar email yang disetujui bisa membaca dan menulis pesan pada ruang chat bersama. Jangan memberi akses editor project kode kepada seluruh tim hanya untuk menggunakan chat.
+
+### Jika masih gagal
+- `BO_CHAT_ALLOWED_EMAILS belum dikonfigurasi`: properti belum disimpan di **project yang sedang di-deploy**, atau nama property salah.
+- `Akun ... belum diizinkan`: email akun Google aktif belum ada pada Value.
+- `Email akun Google tidak terbaca`: cek `Execute as: User accessing the web app` dan otorisasi Google.
+- `You do not have permission to access...`: share spreadsheet chat kepada akun tersebut sebagai Editor.
+- Untuk memastikan project yang benar, lihat deployment ID pada URL `/exec` di **Deploy → Manage deployments**.
