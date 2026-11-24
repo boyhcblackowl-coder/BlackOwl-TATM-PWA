@@ -22,7 +22,7 @@
  const routes=new Set(nav.map(n=>n.id));
  const $=sel=>document.querySelector(sel);
  const content=$("#content");
- let page="overview", search="", category="Semua kategori", installPrompt=null, toastTimer=null;
+ let page="overview", search="", installPrompt=null, toastTimer=null;
  const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const href=(url,label,cls="button primary")=>`<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} <span aria-hidden="true">↗</span></a>`;
  const appUrl=id=>{const u=new URL(C.workspaceUrl);u.searchParams.set("page",id);u.hash=id;return u.toString();};
@@ -117,17 +117,15 @@ function overview(){
 
  function projectCard(p){return `<article class="project-card"><div class="project-head"><div class="project-icon">${p.icon}</div><span class="project-type">${esc(p.kind)}</span></div><h3>${esc(p.name)}</h3><div class="project-meta">${esc(p.cat)}</div><p>${esc(p.desc)}</p><div class="project-actions">${href(p.url,"Buka Project","button primary small")}<button class="copy-btn" data-copy="${p.id}" aria-label="Salin link ${esc(p.name)}">⧉ Salin link</button></div></article>`;}
  function filterProjects(){
-   const v=projects.filter(p=>(category==="Semua kategori"||category===p.cat)&&(!search||[p.name,p.cat,p.kind,p.desc].join(" ").toLowerCase().includes(search.toLowerCase())));
-   $("#projectGrid").innerHTML=v.length?v.map(projectCard).join(""):'<div class="empty-card">Tidak ada project sesuai pencarian Anda.</div>';
-   $("#filterCount").textContent=`${v.length} / ${projects.length} project`;
+   const visible=projects.filter(p=>!search||[p.name,p.cat,p.kind,p.desc].join(" ").toLowerCase().includes(search.toLowerCase()));
+   $("#projectGrid").innerHTML=visible.length?visible.map(projectCard).join(""):'<div class="empty-card">Tidak ada project yang cocok dengan pencarian.</div>';
+   $("#filterCount").textContent=visible.length+" dari "+projects.length+" project";
  }
  function projecthub(){
-   const cats=["Semua kategori",...new Set(projects.map(p=>p.cat))];
-   content.innerHTML=head("Project Team TA & TM","Akses seluruh sistem dan project digital tim, dalam satu tempat.","PROJECT DIRECTORY")+`<section class="hero"><div class="section-cap">ONE LINK. ALL PROJECTS.</div><div class="hero-text"><h1>Build smarter.<br>Work together.</h1><p>10 digital tools untuk recruitment, employee experience, people development, engagement, dan internal operations.</p><div class="hero-actions">${href(appUrl("overview"),"Buka Dashboard Asli")}<button class="button secondary" data-route="overview">Main Dashboard</button></div></div></section><div class="block-title"><div><h2>All Projects</h2><p>Langsung buka tools tanpa mencari link di chat.</p></div><span class="tag">${projects.length} Shortcuts</span></div><div class="filterbar"><label class="search-wrap"><span>⌕</span><input id="projectSearch" type="search" placeholder="Cari project, platform atau fungsi..." value="${esc(search)}"></label><select id="categoryFilter">${cats.map(c=>`<option value="${esc(c)}" ${c===category?"selected":""}>${esc(c)}</option>`).join("")}</select><span id="filterCount"></span></div><section id="projectGrid" class="project-grid"></section><div class="info-band">🔐 <b>Keamanan:</b> daftar shortcut ini dapat dibuka tanpa login PWA. Konten dokumen, dashboard, dan Asana tetap mengikuti izin masing-masing sistem.</div>`;
+   content.innerHTML=head("All Projects","Akses seluruh project dan tools digital TA & TM dalam satu tempat.","PROJECT TEAM TA & TM")+
+    `<div class="filterbar"><label class="search-wrap"><span>⌕</span><input id="projectSearch" type="search" placeholder="Cari nama project..." value="${esc(search)}" aria-label="Cari project"></label><span id="filterCount"></span></div><section id="projectGrid" class="project-grid" aria-label="All Projects"></section>`;
    $("#projectSearch").addEventListener("input",e=>{search=e.target.value;filterProjects();});
-   $("#categoryFilter").addEventListener("change",e=>{category=e.target.value;filterProjects();});
    filterProjects();
-   content.querySelector(".hero").insertAdjacentHTML("afterend",overviewWidget(true));
  }
  function analytics(route){
    const labels={recruitment:["Talent Acquisition Dashboard","Manpower request, fulfillment, hiring trend dan cost center.","Hiring & Workforce"],branding:["Employer Branding Performance","Published content, reach, engagement, dan application in.","Brand & Content"],culture:["People Culture Dashboard","Activity, participation, budget, dan actual cost kegiatan.","People & Culture"]};
