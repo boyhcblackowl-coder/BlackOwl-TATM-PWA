@@ -182,3 +182,74 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   .bo-overview.looker-mode .bo-overview-iframe-viewport iframe{min-width:760px}
   .bo-overview-help{padding:13px 15px}
 }
+
+
+/* Protected data dashboard: native design without prohibited third-party Apps Script iframe */
+.bo-view{background:#0b0e10;color:#fffdf9;border:1px solid #30383c;box-shadow:0 15px 35px #0002;border-radius:18px;overflow:hidden;margin:20px 0 28px}
+.bo-view *{box-sizing:border-box}
+.bo-view-head{display:flex;justify-content:space-between;align-items:start;gap:15px;padding:24px 24px 19px;border-bottom:1px solid #2b3336}
+.bo-view-head .section-cap{color:#ddba7b;margin-bottom:10px}
+.bo-view-head h2{font-size:25px;line-height:1.15;letter-spacing:-.5px;margin:0 0 9px}
+.bo-view-head p{font-size:12px;color:#a7b8c3;line-height:1.5;margin:0}
+.bo-view-status{font-size:10px;color:#8ce6b6;font-weight:800;background:#15251c;border:1px solid #2b6448;border-radius:30px;padding:9px 12px;white-space:nowrap}
+.bo-view-tabs{padding:14px 23px;display:flex;align-items:center;justify-content:space-between;gap:11px;flex-wrap:wrap;border-bottom:1px solid #30383c}
+.bo-view .live-tabs{display:flex;gap:7px;flex-wrap:wrap}
+.bo-view .live-tab{background:#181d20;color:#b8c9d2;border:1px solid #384349;border-radius:10px;font-size:11px;font-weight:750;padding:10px 12px}
+.bo-view .live-tab.active{background:#362c1e;color:#f0cb8b;border-color:#917449}
+.bo-view .button.primary{background:#d7b97c;border-color:#ad8b52;color:#251b12}
+.bo-view .button.light{background:#202a30;border-color:#34424b;color:#d8e7ef}
+.bo-native-content{padding:0 22px 22px}
+.bo-native-columns{display:grid;grid-template-columns:1.58fr 1fr;gap:12px;margin-top:19px}
+.bo-native-spotlight,.bo-native-updates{min-width:0;border:1px solid #323b40;background:#14191c;border-radius:17px;overflow:hidden}
+.bo-native-photo{min-height:315px;height:100%;background:radial-gradient(ellipse at 65% 40%,#53452d8b,transparent 52%),linear-gradient(140deg,#14181a 12%,#25282a 57%,#171b1f);display:flex;align-items:flex-end;position:relative}
+.bo-native-photo:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-25deg,transparent 0,transparent 38px,#ddb87508 39px,#ddb87508 40px);pointer-events:none}
+.bo-native-photo-inner{position:relative;z-index:1;width:100%;padding:25px}
+.bo-photo-mark{width:39px;height:39px;display:grid;place-items:center;background:#493b26;color:#f1d5a0;border:1px solid #9b7d4c;border-radius:12px;margin-bottom:14px;font-size:20px}
+.bo-mini-tag{color:#f3d193;font-size:10px;letter-spacing:.13em;font-weight:850}
+.bo-native-photo h3{font-size:24px;letter-spacing:-.5px;margin:8px 0}
+.bo-native-photo p{max-width:550px;color:#c7d0d2;line-height:1.6;font-size:12px;margin:0}
+.bo-action-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
+.bo-action-row a{font-size:11px;font-weight:800;border:1px solid #95764a;background:#382e22;color:#f4cc84;border-radius:9px;padding:10px 12px}
+.bo-native-updates-title{padding:18px 18px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #333a3c}
+.bo-native-updates-title h3{font-size:14px;margin:0}.bo-native-updates-title span{font-size:10px;color:#d6b878}
+.bo-update-row{padding:13px 17px;border-bottom:1px solid #353d40}
+.bo-update-row:last-child{border:0}.bo-update-row b{display:block;font-size:12px}
+.bo-update-row p{font-size:11px;color:#a8b8c0;line-height:1.45;margin:7px 0}
+.bo-update-row a{color:#e2bf7e;font-weight:800;font-size:11px}
+.bo-period-info{margin-top:16px;border:1px solid #364248;border-radius:12px;background:#151b1e;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bo-period-info span{font-size:11px;color:#b9cbd2}
+.bo-period-info a{color:#e3c48d;font-size:11px;font-weight:800}
+.bo-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:15px}
+.bo-kpi-card{min-width:0;min-height:105px;padding:16px;border:1px solid #354047;background:#151b1e;border-radius:12px;display:flex;flex-direction:column}
+.bo-kpi-card:before{content:"";display:block;width:35px;height:2px;background:#d7b97c;margin-bottom:12px}
+.bo-kpi-card span{font-size:11px;color:#d4e0e6}
+.bo-kpi-card strong{font-size:26px;margin:8px 0 4px;color:#fffdf9;line-height:1}
+.bo-kpi-card small{font-size:10px;color:#91a7b2}
+.bo-connect-note{margin-top:15px;display:flex;gap:11px;align-items:start;color:#d9c6a1;border:1px solid #76603e;background:#2c271f;border-radius:12px;font-size:11px;padding:14px;line-height:1.65}
+.bo-connect-icon{font-size:17px;color:#e1bb7a}
+.bo-looker-controls{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #374047}
+.bo-looker-controls b{font-size:12px;color:#c7d4d8}
+.bo-view .live-frame-scroll{background:#111418;overflow:auto}
+.bo-view .live-frame-scroll iframe{display:block;width:100%;min-width:900px;height:800px;border:0}
+.bo-view.compact .bo-native-columns{grid-template-columns:1.3fr 1fr}
+.bo-view.compact .bo-native-photo{min-height:285px}
+.bo-view.compact .bo-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1160px){
+ .bo-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .bo-view.compact .bo-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:850px){
+ .bo-view-head{padding:19px 15px 14px;display:block}
+ .bo-view-head h2{font-size:21px}
+ .bo-view-status{display:inline-block;margin-top:11px}
+ .bo-view-tabs{padding:12px;align-items:start}
+ .bo-view .live-tab{font-size:10px;padding:8px 9px}
+ .bo-native-content{padding:0 11px 13px}
+ .bo-native-columns,.bo-view.compact .bo-native-columns{grid-template-columns:1fr}
+ .bo-native-photo,.bo-view.compact .bo-native-photo{min-height:290px}
+ .bo-kpi-grid,.bo-view.compact .bo-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .bo-kpi-card{padding:12px;min-height:100px}
+ .bo-period-info{align-items:start;display:grid}
+ .bo-view .live-frame-scroll iframe{min-width:740px}
+ .bo-view .live-caption{padding:13px}
+}
