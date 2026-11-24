@@ -45,33 +45,60 @@
  const head=(title,sub,tag)=>`<div class="section-cap">BLACK OWL • ${esc(tag)}</div><div class="page-heading"><div><h1 class="page-title">${esc(title)}</h1><p class="page-copy">${esc(sub)}</p></div><span class="tag">● Team Workspace</span></div>`;
 
  function overviewWidget(compact=false){
-   const rep=C.looker.recruitment;
-   return `<section class="live-overview ${compact?'compact':''}" id="liveOverview">
-      <div class="live-top"><div><div class="section-cap">LIVE DATA • LOOKER STUDIO</div>
-      <h2>Dashboard Overview</h2><p>Melihat report aktual TA & TM dalam PWA. Data dan refresh tetap mengikuti Looker Studio.</p></div>
-      <span class="live-pill"><i></i> Sumber: Looker Studio</span></div>
-      <div class="live-controls"><div class="live-tabs" role="group" aria-label="Pilih dashboard">
-        <button type="button" class="live-tab active" data-live-report="recruitment">Talent Acquisition</button>
+  const dashboardUrl=appUrl("overview");
+  return `<section class="live-overview bo-overview ${compact?'compact':''} original-mode" id="liveOverview">
+    <header class="bo-overview-head">
+      <div><div class="section-cap">BLACK OWL • LIVE MANAGEMENT DATA MART</div>
+      <h2>TA & TM — Overview</h2>
+      <p>Program Spotlight, dokumentasi kegiatan, filter periode dan 12 KPI live dari Workspace Black Owl.</p></div>
+      <span class="bo-overview-tag">● Original Live Dashboard</span>
+    </header>
+    <div class="bo-overview-controls">
+      <div class="live-tabs" role="group" aria-label="Pilih sumber dashboard">
+        <button type="button" class="live-tab active" data-live-report="original" aria-pressed="true">Overview Lengkap</button>
+        <button type="button" class="live-tab" data-live-report="recruitment">Talent Acquisition</button>
         <button type="button" class="live-tab" data-live-report="branding">Employer Branding</button>
-        <button type="button" class="live-tab" data-live-report="culture">People Culture</button></div>
-        <div class="live-actions"><button type="button" class="button light small" id="refreshLiveFrame">↻ Refresh</button>
-        <a class="button primary small" id="liveReportLink" href="${esc(rep.view)}" target="_blank" rel="noopener noreferrer">Buka Report ↗</a></div></div>
-      <div class="live-frame-scroll"><iframe id="liveReportFrame" title="TA & TM Live Dashboard" src="${esc(rep.embed)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-      <div class="live-caption">Jika iframe tidak muncul karena izin akun Google atau pembatasan cookies, gunakan “Buka Report”. Angka mengikuti sumber data dan jadwal refresh Looker Studio.</div>
-   </section>`;
- }
- function setLiveReport(mode){
-   const shell=document.getElementById("liveOverview");if(!shell)return;
-   const rep=C.looker[mode];if(!rep)return;
-   const frame=shell.querySelector("#liveReportFrame");
-   frame.src=rep.embed;
-   frame.title=mode==="recruitment"?"Talent Acquisition":mode==="branding"?"Employer Branding":"People Culture";
-   const a=shell.querySelector("#liveReportLink");a.href=rep.view;
-   shell.querySelectorAll("[data-live-report]").forEach(x=>x.classList.toggle("active",x.dataset.liveReport===mode));
- }
- function overview(){
-   content.innerHTML=head("Live Dashboard","Seluruh data Recruitment, Employer Branding, dan People Culture langsung dalam satu workspace.","DATA ANALYTICS")+overviewWidget(false);
- }
+        <button type="button" class="live-tab" data-live-report="culture">People Culture</button>
+      </div>
+      <div class="live-actions">
+        <button type="button" class="button light small" id="refreshLiveFrame">↻ Refresh</button>
+        <a class="button primary small" id="liveReportLink" href="${esc(dashboardUrl)}" target="_blank" rel="noopener noreferrer">Buka Dashboard Asli ↗</a>
+      </div>
+    </div>
+    <div class="bo-overview-iframe-viewport" id="boOverviewViewport">
+      <iframe id="liveReportFrame" title="Black Owl TA & TM Overview — Original Live Dashboard"
+        src="${esc(dashboardUrl)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <div class="bo-overview-help">
+      <span>Data tetap dibaca dari Apps Script, Program Planner dan Management Data Mart — bukan angka screenshot.</span>
+      <span>Jika area gelap, kosong, atau “refused to connect”, Google mungkin memblokir iframe. Gunakan <b>Buka Dashboard Asli</b>. Tampilan native penuh memerlukan integrasi API terautentikasi.</span>
+    </div>
+  </section>`;
+}
+
+function setLiveReport(mode){
+  const shell=document.getElementById("liveOverview");
+  if(!shell)return;
+  const isOriginal=mode==="original";
+  const source=isOriginal?{embed:appUrl("overview"),view:appUrl("overview")}:C.looker[mode];
+  if(!source)return;
+  const frame=shell.querySelector("#liveReportFrame");
+  frame.src=source.embed;
+  frame.title=isOriginal?"Black Owl TA & TM Overview — Original Live Dashboard":mode==="recruitment"?"Talent Acquisition — Looker Studio":mode==="branding"?"Employer Branding — Looker Studio":"People Culture — Looker Studio";
+  const link=shell.querySelector("#liveReportLink");
+  link.href=source.view;
+  link.textContent=isOriginal?"Buka Dashboard Asli ↗":"Buka Report ↗";
+  shell.classList.toggle("original-mode",isOriginal);
+  shell.classList.toggle("looker-mode",!isOriginal);
+  shell.querySelectorAll("[data-live-report]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.liveReport===mode);
+    btn.setAttribute("aria-pressed",String(btn.dataset.liveReport===mode));
+  });
+}
+
+function overview(){
+  content.innerHTML=head("Dashboard Overview","Pantau Program Spotlight, update tim, filter periode dan KPI live dalam satu tampilan.","MANAGEMENT OVERVIEW")+overviewWidget(false);
+}
 
  function home(){
    const cards=[["◫","Project Team TA & TM","10 shortcut project digital.","projecthub"],["♧","Talent Acquisition","Dashboard fulfillment dan hiring.","recruitment"],["▤","Program Planner","Rencana dan progres program.","planner"],["☷","Weekly MoM","Arsip meeting dan follow-up.","weeklymom"]];
