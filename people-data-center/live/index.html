@@ -11,7 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../../icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="../../icon-180.png">
-<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./styles.css?v=20261125-mpp2">
 </head>
 <body>
 <div class="app">
@@ -47,6 +47,23 @@
       <section class="card panel"><div class="panelhead"><div><div class="panel-title">Sebaran Karyawan per Outlet / Unit</div><div class="panel-sub">Jumlah data berdasarkan lokasi kerja</div></div><span class="pill light-pill" id="locationCount">— units</span></div><div id="locationBars"></div></section>
       <section class="card panel"><div class="panelhead"><div><div class="panel-title">komposisin by Gender</div><div class="panel-sub">Hanya data jenis kelamin yang tersedia</div></div></div><div id="genderDonut"></div></section>
     </div>
+
+    <section class="card panel mpp-overview-card" aria-label="Ringkasan MPP per Departemen">
+      <div class="panelhead">
+        <div><div class="panel-title">Ringkasan MPP per Departemen</div><div class="panel-sub">Jumlah aktual karyawan aktif per departemen, tanpa rincian posisi</div></div>
+        <button class="btn ghost" type="button" id="mppOverviewOpen">Lihat Detail MPP →</button>
+      </div>
+      <div class="mpp-overview-toolbar">
+        <label for="mppOverviewUnit">Pilih outlet / unit bisnis</label>
+        <select id="mppOverviewUnit" aria-label="Filter outlet untuk ringkasan MPP">
+          <option value="">Semua Outlet / Unit</option>
+        </select>
+        <span class="mpp-overview-help">Sumber: roster Excel unik berstatus Aktif</span>
+      </div>
+      <div id="mppOverviewStats" class="mpp-overview-stats" aria-live="polite"></div>
+      <div id="mppOverviewDepartments" class="mpp-overview-departments"></div>
+      <div class="mpp-overview-foot">Ringkasan ini menunjukkan <strong>Actual Manpower</strong>, bukan target kebutuhan MPP. Data Tidak Aktif dan Asana tidak ikut dihitung.</div>
+    </section>
     <div class="grid22">
       <section class="card panel"><div class="panelhead"><div><div class="panel-title">Distribusi Grade Jabatan</div><div class="panel-sub">Distribusi tingkat jabatan yang tersedia</div></div><button class="btn ghost" data-go="analytics">Detail →</button></div><div id="gradeBars"></div></section>
       <section class="card panel"><div class="panelhead"><div><div class="panel-title">Ringkasan Masa Kerja</div><div class="panel-sub">Dihitung dari tanggal bergabung sampai hari ini</div></div><button class="btn ghost" data-go="analytics">Detail →</button></div><div id="tenureBars"></div></section>
@@ -137,7 +154,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="./auth.js"></script>
 <script src="./bridge.js"></script>
-<script src="./mpp-breakdown.js?v=20261125-1"></script>
+<script src="./mpp-breakdown.js?v=20261125-2"></script>
 <script src="./dashboard-app.js?v=20261125-mpp1"></script>
 </body>
 </html>
