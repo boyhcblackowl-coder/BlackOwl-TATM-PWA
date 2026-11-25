@@ -10,6 +10,8 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console'
 await page.goto('http://localhost:8000/?page=office#office',{waitUntil:'domcontentloaded'});
 await page.locator('.vo-root[data-webgl="ready"]').waitFor({timeout:45000});
 assert.equal(await page.locator('.vo-pin').count(),4);
+assert.equal(await page.locator('.vo-root').getAttribute('data-brand-logo'),'ready');
+assert.equal(await page.locator('.vo-mode').textContent(),'WORKSPACE READY');
 assert.equal(await page.locator('.vo-member').count(),4);
 assert.equal(await page.locator('.vo-panel h3').textContent(),'Naboya');
 await page.screenshot({path:'office-preview-desktop.png',fullPage:true});
