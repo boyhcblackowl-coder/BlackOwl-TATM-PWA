@@ -45,3 +45,24 @@
 .mpp-position{cursor:pointer}.mpp-position:hover{background:#252b32}.mpp-role{font-weight:700;text-decoration:underline;text-decoration-color:#937750;text-underline-offset:3px}.mpp-unset{font-size:11px;color:#97a0a7}
 @media(max-width:1100px){.mpp-cards,.mpp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.mpp-filters{grid-template-columns:1fr}.mpp-group>summary{padding:13px}.mpp-table{min-width:630px}.mpp-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Main Dashboard: compact outlet-level department manpower rollup. */
+.mpp-overview-card{margin:20px 0;padding:20px}
+.mpp-overview-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:15px 0 16px}
+.mpp-overview-toolbar label{font-size:11px;font-weight:700;color:#b7c0c8}
+.mpp-overview-toolbar select{min-width:215px;max-width:100%;border:1px solid #3e464c;border-radius:9px;background:#10151a;color:#f0ebe0;padding:10px 12px;font:inherit}
+.mpp-overview-help{margin-left:auto;color:#939faa;font-size:10px}
+.mpp-overview-stats{display:flex;gap:24px;flex-wrap:wrap;background:#1c1d1e;border:1px solid #353535;border-radius:10px;padding:14px 18px;margin-bottom:18px}
+.mpp-overview-stats>div{min-width:130px;display:flex;flex-direction:column;gap:6px}
+.mpp-overview-stats small{font-size:10px;color:#9fa9b1}
+.mpp-overview-stats strong{font-size:24px;font-weight:800;color:#e1bc80;line-height:1.1}
+.mpp-overview-departments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:26px;row-gap:16px}
+.mpp-overview-item{min-width:0}
+.mpp-overview-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px}
+.mpp-overview-row>span:first-child{color:#f0ebe3;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mpp-overview-row>span:last-child{color:#e7c48d;white-space:nowrap}
+.mpp-overview-row small{font-size:10px;color:#9ba8b4;font-weight:400}
+.mpp-overview-track{height:6px;margin-top:8px;background:#2b3239;border-radius:6px;overflow:hidden}
+.mpp-overview-track>span{display:block;height:100%;border-radius:6px;background:#caa46b}
+.mpp-overview-foot{color:#9ba4ac;font-size:10px;line-height:1.6;margin-top:18px}
+@media(max-width:760px){.mpp-overview-departments{grid-template-columns:1fr}.mpp-overview-help{margin-left:0;width:100%}.mpp-overview-card{padding:15px}.mpp-overview-stats{gap:13px}.mpp-overview-stats>div{min-width:105px}}
