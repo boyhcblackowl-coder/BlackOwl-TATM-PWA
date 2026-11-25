@@ -3,7 +3,7 @@
   "name": "Black Owl — TA & TM Workspace",
   "short_name": "TA & TM",
   "description": "Black Owl TA & TM Main Dashboard, projects and team workspace",
-  "start_url": "./?page=overview#overview",
+  "start_url": "./?page=office#office",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0C0D0F",
