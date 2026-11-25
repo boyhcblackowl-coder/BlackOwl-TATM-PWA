@@ -14,6 +14,7 @@
  {id:"talent",name:"Black Owl Talent Hub",kind:"Web App",cat:"Recruitment Tools",icon:"🎯",desc:"Talent sourcing dan workflow rekrutmen tim TA & TM.",url:"https://script.google.com/macros/s/AKfycbxgVwR8Trri5Fg_MEyoPzKAzHhMsOxX_vl0eciyylm2PS460aJv2gGTIYgcxH1widHNlw/exec"}
  ];
  const nav=[
+ {id:"office",name:"Office HQ",symbol:"◉"},
  {id:"overview",name:"Main Dashboard",symbol:"▦"},{id:"projecthub",name:"Project Team TA & TM",symbol:"◫"},
  {id:"recruitment",name:"Talent Acquisition",symbol:"♧"},{id:"branding",name:"Employer Branding",symbol:"◈"},
  {id:"culture",name:"People Culture",symbol:"♡"},{id:"planner",name:"Program Planner & Notes",symbol:"▤"},
@@ -22,14 +23,14 @@
  const routes=new Set(nav.map(n=>n.id));
  const $=sel=>document.querySelector(sel);
  const content=$("#content");
- let page="overview", search="", installPrompt=null, toastTimer=null;
+ let page="office", search="", installPrompt=null, toastTimer=null;
  const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const href=(url,label,cls="button primary")=>`<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} <span aria-hidden="true">↗</span></a>`;
  const appUrl=id=>{const u=new URL(C.workspaceUrl);u.searchParams.set("page",id);u.hash=id;return u.toString();};
- const routeFromLocation=()=>{const p=new URLSearchParams(location.search).get("page")||location.hash.slice(1);return p==="home"?"overview":routes.has(p)?p:"overview";};
+ const routeFromLocation=()=>{const p=new URLSearchParams(location.search).get("page")||location.hash.slice(1);return p==="home"?"office":routes.has(p)?p:"office";};
  function toast(txt){const t=$("#toast");t.textContent=txt;t.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.hidden=true,3500);}
  function go(to,replace=false){
-   page=to==="home"?"overview":routes.has(to)?to:"overview";
+   page=to==="home"?"office":routes.has(to)?to:"office";
    const u=new URL(location.href);u.searchParams.set("page",page);u.hash=page;
    (replace?history.replaceState:history.pushState).call(history,{page},"",u.toString());
    render();window.scrollTo(0,0);hideDrawer();
@@ -37,7 +38,7 @@
  function renderNav(){
    const n=nav.map(x=>`<button type="button" data-route="${x.id}" class="nav-link ${page===x.id?"active":""}" ${page===x.id?'aria-current="page"':""}><span class="symbol" aria-hidden="true">${x.symbol}</span><span>${esc(x.name)}</span></button>`).join("");
    $("#sideMenu").innerHTML=n;$("#drawerMenu").innerHTML=n;
-   const bottom=[["overview","Main Dashboard","▦"],["projecthub","Projects","◫"],["recruitment","Hiring","♧"],["planner","Planner","▤"]];
+   const bottom=[["office","Office HQ","◉"],["projecthub","Projects","◫"],["recruitment","Hiring","♧"],["planner","Planner","▤"]];
    $("#bottomNav").innerHTML=bottom.map(x=>`<button class="bottom-item ${page===x[0]?"active":""}" data-route="${x[0]}"><span class="b-icon">${x[2]}</span>${x[1]}</button>`).join("")+'<button class="bottom-item" id="bottomMore"><span class="b-icon">☷</span>More</button>';
    $("#breadcrumb").textContent="Workspace / "+(nav.find(x=>x.id===page)?.name||"Project Hub");
    document.title=(nav.find(x=>x.id===page)?.name||"Workspace")+" | Black Owl TA & TM";
@@ -237,7 +238,7 @@ function overview(){
    const x={planner:["▤","Program Planner & Notes","Kelola rencana, PIC, status, program, quick notepad, foto dan video dokumentasi.",appUrl("planner"),"Buka Program Planner"],weeklymom:["☷","Weekly MoM","Baca notulen meeting mingguan, topik rapat dan tindak lanjut.",appUrl("weeklymom"),"Buka Weekly MoM"],workspace:["↗","Original TA & TM Workspace","Buka dashboard live dan seluruh modul Google Apps Script existing.",appUrl("projecthub"),"Buka Workspace"]}[route];
    content.innerHTML=head(x[1],x[2],"TEAM OPERATIONS")+`<section class="launch-card"><div class="launch-icon">${x[0]}</div><div class="section-cap" style="margin-top:18px">BLACK OWL INTERNAL TOOLS</div><h2>Your tools stay connected.</h2><p>${esc(x[2])}</p><div class="hero-actions">${href(x[3],x[4])}${route==="weeklymom"?href(C.asanaMomUrl,"Task Asana","button light"):""}<button class="button flat" data-route="projecthub">Kembali ke Project Hub</button></div><div class="launch-meta">Akses data dan penyimpanan tetap menggunakan backend existing serta hak akses Google/Asana.</div></section>`;
  }
- function render(){renderNav();if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(page==="weeklymom")weeklyMom();else if(page==="planner")plannerNativePage();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();if(window.BO_MOM)window.BO_MOM.mount();if(window.BO_PLANNER)window.BO_PLANNER.mount();}
+ function render(){if(window.BO_OFFICE)window.BO_OFFICE.unmount();renderNav();if(page==="office"){content.innerHTML="";if(window.BO_OFFICE)window.BO_OFFICE.mount(content);else content.textContent="Office module unavailable. Open Main Dashboard from the menu.";}else if(page==="overview")overview();else if(page==="projecthub")projecthub();else if(page==="weeklymom")weeklyMom();else if(page==="planner")plannerNativePage();else if(["recruitment","branding","culture"].includes(page))analytics(page);else launch(page);if(window.BO_LIVE)window.BO_LIVE.mount();if(window.BO_MOM)window.BO_MOM.mount();if(window.BO_PLANNER)window.BO_PLANNER.mount();}
  function showDrawer(){$("#mobileDrawer").hidden=false;$("#mobileBackdrop").hidden=false;}
  function hideDrawer(){$("#mobileDrawer").hidden=true;$("#mobileBackdrop").hidden=true;}
 
