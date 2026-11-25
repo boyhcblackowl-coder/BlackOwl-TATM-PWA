@@ -1,0 +1,9 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0c0d0f"><title>Pemeriksaan Install · People Data Center</title><style>body{font:14px system-ui;background:#0c0d0f;color:#eee;max-width:780px;margin:32px auto;padding:20px}h1{font-size:26px}span,.ok{color:#d6b479}.card{padding:22px;border-radius:16px;border:1px solid #40382b;background:#16191d;margin:12px 0}.result{padding:8px 0;border-bottom:1px solid #292c30}small{color:#aeb8c3}a{color:#d6b479}</style></head><body><h1>Black Owl <span>People Data Center</span></h1><p>Halaman pemeriksaan instalasi PWA</p><div class="card" id="results"><div class="result">Memeriksa...</div></div><small>Halaman ini tidak membaca atau menyimpan data karyawan.</small><p><a href="./">Kembali ke PWA</a></p><script>
+(async()=>{
+const items=[];items.push(["HTTPS / Secure context",location.protocol==="https:"||location.hostname==="localhost"]);
+let manifest=false;try{const r=await fetch("./manifest.webmanifest",{cache:"no-store"});const data=await r.json();manifest=r.ok&&data.name==="Black Owl People Data Center"&&data.display==="standalone"}catch{}items.push(["Manifest",manifest]);
+let sw=false;try{if("serviceWorker" in navigator){const r=await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});sw=!!r&&!!r.scope}}catch{}items.push(["Service worker",sw]);
+items.push(["Browser terpasang sebagai aplikasi",matchMedia("(display-mode: standalone)").matches||!!navigator.standalone]);
+document.getElementById("results").innerHTML=items.map(([k,v])=>'<div class="result">'+(v?'✓':'○')+' '+k+' — <b class="ok">'+(v?'OK':'Belum / tidak didukung')+'</b></div>').join("");
+})()
+</script></body></html>
