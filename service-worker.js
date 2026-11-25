@@ -1,6 +1,6 @@
 (function serviceWorker() {
- const KEY="bo-tatm-pwa-v11-office-hq";
- const ASSETS=["./","./index.html","./styles.css","./office-hq.css","./office-hq.js","./app.js","./config.js","./dashboard-live.js","./weekly-mom.js","./planner-live.js","./manifest.webmanifest","./icon-64.png","./icon-180.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./offline.html","./install-check.html"];
+ const KEY="bo-tatm-pwa-v12-webgl-office";
+ const ASSETS=["./","./index.html","./styles.css","./office-hq.css","./office-hq.js","./vendor/three.module.min.js","./app.js","./config.js","./dashboard-live.js","./weekly-mom.js","./planner-live.js","./manifest.webmanifest","./icon-64.png","./icon-180.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./offline.html","./install-check.html"];
  self.addEventListener("install",e=>{e.waitUntil(caches.open(KEY).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));});
  self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("bo-tatm-")&&k!==KEY).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
  self.addEventListener("fetch",e=>{
