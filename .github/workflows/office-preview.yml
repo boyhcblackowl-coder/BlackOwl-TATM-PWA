@@ -1,0 +1,26 @@
+name: Office HQ WebGL preview test
+on:
+  push:
+    branches: [immersive-office-webgl]
+permissions:
+  contents: read
+jobs:
+  browser-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock playwright-core@1.51.1
+      - name: Run browser verification
+        run: |
+          python3 -m http.server 8000 > /tmp/office-server.log 2>&1 &
+          node tests/office-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: office-hq-browser-preview
+          path: office-preview-*.png
+          if-no-files-found: ignore
