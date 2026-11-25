@@ -80,6 +80,7 @@ function begin(){
   const row=e.target.closest('tr[data-role]');if(!row)return;
   const nav=document.querySelector('button[data-view="directory"]:not([data-default-scope])');
   if(!nav)return;nav.click();
+  const activeTab=document.querySelector('#scopeSwitcher2 button[data-scope="overall"]');if(activeTab)activeTab.click();
   const unit=$('filterUnit'),search=$('searchName');
   if(unit)unit.value=row.dataset.unit;
   if(search){search.value=row.dataset.role;search.dispatchEvent(new Event('input',{bubbles:true}));}
