@@ -1,0 +1,2 @@
+# Office HQ V4
+Portraits: cropped, downsampled from user-supplied reference image; illustrative, not actual employee photos. Existing procedural WebGL models remain. Task simulation uses browser memory and timers, no Gemini/Asana/EATS API or real data. No persistent task storage; navigation away cancels simulations. UI has selectable portrait cards, synchronized agent labels, demo work animation, command input, local history, reset, and shortcuts. Do not enter confidential data. Public frontend; production AI needs authenticated backend.

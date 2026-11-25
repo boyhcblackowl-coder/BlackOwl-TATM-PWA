@@ -14,7 +14,14 @@ assert.equal(await page.locator('.vo-root').getAttribute('data-brand-logo'),'rea
 assert.equal(await page.locator('.vo-mode').textContent(),'WORKSPACE READY');
 assert.equal(await page.locator('.vo-member').count(),4);
 assert.equal(await page.locator('.vo-panel h3').textContent(),'Naboya');
+await page.locator('.vo-cardportrait').first().waitFor();
+assert.equal(await page.locator('.vo-cardportrait').evaluateAll(a=>a.every(x=>x.complete&&x.naturalWidth>0)),true);
 await page.screenshot({path:'office-preview-desktop.png',fullPage:true});
+await page.locator('[data-vo="suggest"]').click();await page.locator('#vo-run').click();
+await page.waitForFunction(()=>document.querySelector('#vo-completed').textContent==='01',{timeout:10000});
+assert.match(await page.locator('.vo-history').textContent(),/Tidak ada data asli/);
+await page.locator('[data-vo="clear"]').click();
+assert.equal(await page.locator('#vo-completed').textContent(),'00');
 for(const [i,name] of ['Naboya','Yoga','Livia','Naomi'].entries()){await page.locator('.vo-member').nth(i).click();assert.equal(await page.locator('.vo-panel h3').textContent(),name);}
 await page.locator('[data-vo="left"]').click();await page.locator('[data-vo="plus"]').click();await page.locator('[data-vo="reset"]').click();
 assert.equal(await page.locator('.vo-root').getAttribute('data-webgl'),'ready');

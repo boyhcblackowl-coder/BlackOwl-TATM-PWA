@@ -1,7 +1,7 @@
 name: Office HQ WebGL preview test
 on:
   push:
-    branches: [immersive-office-webgl, office-brand-refresh]
+    branches: [immersive-office-webgl, office-brand-refresh, interactive-office-v4]
 permissions:
   contents: read
 jobs:
