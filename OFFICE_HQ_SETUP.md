@@ -1,0 +1,6 @@
+# Office HQ — development preview
+
+New optional UI module in existing PWA. No new backend, secrets, data collection or AI integration. Four illustrative role avatars, orthographic world-coordinate 3D scene drawn on Canvas 2D, selectable labels, rotate within a limited range, zoom, reset, fullscreen (browser permitting), existing workspace navigation and Team Chat shortcut. Not photorealistic and no character skeletal animation. All status counters are explicitly disconnected. Existing PWA is public; do not use this frontend to store employee records, secrets or private instructions. AI work requires separate authenticated Cloudflare backend and permission checks.
+
+## Test before merging
+Download this branch ZIP from GitHub and extract. Run `python -m http.server 8000` at its root, then open http://localhost:8000/ . Alternatively use any local static web server. Do not configure Pages to deploy the branch until ready. Check default Office HQ, each character, quick actions, rotate and zoom, mobile width, Team Chat, Main Dashboard, Project Hub, planner, MoM, browser back and PWA update. Existing backend OAuth may reject localhost; test authorized staging origin or existing production after approved rollout. This preview does not alter production main.
