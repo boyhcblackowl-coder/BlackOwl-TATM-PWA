@@ -56,6 +56,33 @@ function render(){
  $('mppExport').hidden=!admin;
  $('mppTemplate').hidden=!admin;
 }
+
+/* Main Dashboard: summary by department only, using the same deduplicated active roster as Breakdown MPP. */
+function renderSummary(){
+ const select=$('mppOverviewUnit');if(!select)return;
+ const allUnits=groups(records),selected=select.value;
+ select.innerHTML='<option value="">Semua Outlet / Unit</option>'+allUnits.map(u=>'<option value="'+esc(u.name)+'">'+esc(u.name)+'</option>').join('');
+ select.value=allUnits.some(u=>u.name===selected)?selected:'';
+ const filteredRows=records.filter(r=>!select.value||(clean(r.unit)||'Belum diisi')===select.value);
+ const deptCounts=new Map();
+ for(const r of filteredRows){const dept=clean(r.department)||'Belum diisi';deptCounts.set(dept,(deptCounts.get(dept)||0)+1);}
+ const depts=[...deptCounts.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'id'));
+ const activeTotal=filteredRows.length,allDepartmentCount=depts.length;
+ const deptMissing=deptCounts.get('Belum diisi')||0;
+ $('mppOverviewStats').innerHTML=
+   '<div><small>Actual Karyawan Aktif</small><strong>'+fmt(activeTotal)+'</strong></div>'+
+   '<div><small>Jumlah Departemen</small><strong>'+fmt(allDepartmentCount)+'</strong></div>'+
+   '<div><small>Outlet / Unit</small><strong>'+fmt(select.value?1:allUnits.length)+'</strong></div>'+
+   (deptMissing?'<div><small>Departemen Belum Diisi</small><strong>'+fmt(deptMissing)+'</strong></div>':'');
+ const top=depts.slice(0,10);
+ const otherCount=depts.slice(10).reduce((n,[,v])=>n+v,0);
+ const items=otherCount?[...top,['Departemen lainnya ('+(depts.length-10)+')',otherCount]]:top;
+ $('mppOverviewDepartments').innerHTML=items.length?items.map(([name,count])=>{
+  const percent=activeTotal?(100*count/activeTotal):0;
+  return '<div class="mpp-overview-item"><div class="mpp-overview-row"><span title="'+esc(name)+'">'+esc(name)+'</span><span><strong>'+fmt(count)+'</strong> <small>('+percent.toLocaleString('id-ID',{maximumFractionDigits:1})+'%)</small></span></div><div class="mpp-overview-track"><span style="width:'+Math.max(1,percent).toFixed(1)+'%"></span></div></div>';
+ }).join(''):'<div class="empty">Data karyawan aktif belum tersedia untuk outlet ini.</div>';
+}
+
 function download(template){
  if(!admin)return;
  const groupsFiltered=groups(filtered()),lines=[['Unit / Outlet','Departemen','Posisi','Actual Aktif','Target MPP','Selisih (Target - Actual)']];
@@ -69,6 +96,8 @@ function begin(){
  $('mppUnit')?.addEventListener('change',render);
  $('mppQuery')?.addEventListener('input',render);
  $('mppReset')?.addEventListener('click',()=>{$('mppUnit').value='';$('mppQuery').value='';render();});
+ $('mppOverviewUnit')?.addEventListener('change',renderSummary);
+ $('mppOverviewOpen')?.addEventListener('click',()=>{const chosen=$('mppOverviewUnit')?.value||'';document.querySelector('button[data-view="mpp"]')?.click();if($('mppUnit')){$('mppUnit').value=chosen;render();}});
  $('mppExport')?.addEventListener('click',()=>download(false));
  $('mppTemplate')?.addEventListener('click',()=>download(true));
  $('mppCards')?.addEventListener('click',e=>{
@@ -86,6 +115,6 @@ function begin(){
   if(search){search.value=row.dataset.role;search.dispatchEvent(new Event('input',{bubbles:true}));}
  });
 }
-window.PDC_MPP={render(data,canEdit){records=Array.isArray(data)?data:[];admin=Boolean(canEdit);render();}};
+window.PDC_MPP={render(data,canEdit){records=Array.isArray(data)?data:[];admin=Boolean(canEdit);render();renderSummary();}};
 begin();
 })();
