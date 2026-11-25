@@ -1,13 +1,13 @@
 {
-  "id": "./?app=blackowl-pdc-v1",
+  "id": "./?app=blackowl-people-data-center-v1",
   "name": "Black Owl People Data Center",
   "short_name": "People Data",
-  "description": "PWA akses internal Human Capital Black Owl",
+  "description": "Black Owl People Data Center — PWA akses internal HCGA & Legal",
   "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "theme_color": "#0c0d0f",
-  "background_color": "#080a0d",
+  "background_color": "#090b0e",
+  "theme_color": "#0b0d10",
   "orientation": "any",
   "icons": [
     {
@@ -32,5 +32,24 @@
   "categories": [
     "business",
     "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "Main Dashboard",
+      "short_name": "Dashboard",
+      "url": "./live/?view=overview",
+      "icons": [
+        {
+          "src": "../icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Monitoring Kontrak",
+      "short_name": "Kontrak",
+      "url": "./live/?view=contracts"
+    }
   ]
 }

@@ -1,43 +1,69 @@
 <!doctype html>
-<html lang="id"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0c0d0f"><meta name="color-scheme" content="dark">
-<meta name="description" content="Black Owl People Data Center — PWA internal HCGA & Legal">
-<meta name="robots" content="noindex,nofollow,noarchive"><meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="People Data">
-<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="../icon-192.png"><link rel="apple-touch-icon" href="../icon-180.png">
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d10">
+<meta name="description" content="PWA akses internal Black Owl People Data Center untuk HCGA & Legal.">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="People Data">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="stylesheet" href="./styles.css">
+<script src="./app.js" defer></script>
 <title>Black Owl People Data Center</title>
-<style>
-:root{font-family:Inter,"Segoe UI",system-ui,sans-serif;--bg:#080a0d;--panel:#14171b;--bd:#303339;--gold:#d6b479;--muted:#98a3b2;color:#f3f3f4;background:var(--bg)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}.layout{display:flex;min-height:100vh}.side{width:230px;flex:none;padding:24px 13px;position:sticky;top:0;height:100vh;background:#0c0e11;border-right:1px solid #282b2f;display:flex;flex-direction:column}.brand{display:flex;gap:10px;align-items:center;padding:8px 8px 34px;font-size:12px;font-weight:900;letter-spacing:.06em}.brand img{width:39px;height:39px}.brand small{display:block;color:var(--gold);letter-spacing:.14em;margin-top:4px}.menu-label{color:#6c798b;letter-spacing:.14em;font-size:10px;font-weight:900;padding:9px 10px}.nav{display:block;width:100%;text-align:left;padding:13px;border:0;border-radius:10px;background:transparent;color:#c2cbd8;margin:3px 0;cursor:pointer}.nav:hover{background:#1e2228}.nav.current{background:#282319;border-left:3px solid var(--gold);color:#f6d99e}.side-foot{margin-top:auto;font-size:11px;color:#8f99a6;padding:14px;border:1px solid #3b3228;border-radius:12px;line-height:1.7}.side-foot b{color:#eed2a0}.content{flex:1;min-width:0}.bar{height:60px;border-bottom:1px solid #292d32;display:flex;justify-content:space-between;align-items:center;padding:0 4%;font-size:11px;color:#b7bec9;background:#0d0f13}.pill{border:1px solid #59472d;background:#2a241a;color:#e2c38d;border-radius:25px;padding:7px 12px;font-size:10px;font-weight:800}main{max-width:1250px;margin:auto;padding:30px 4%}.hero{border:1px solid #4d4232;border-radius:22px;padding:35px;min-height:350px;background:radial-gradient(ellipse at right top,#5a44274f,#17191b 59%,#101215 100%)}.eyebrow{color:var(--gold);font-size:11px;font-weight:900;letter-spacing:.2em}.hero-grid{display:grid;grid-template-columns:1fr 185px;align-items:center}.hero h1{font-size:clamp(33px,4.4vw,56px);margin:24px 0 16px;line-height:1.03;letter-spacing:-.045em}.hero h1 em{color:var(--gold);font-style:normal}.hero p{max-width:690px;line-height:1.75;color:#bac2ce;font-size:14px}.hero-icon{max-width:160px;width:100%;justify-self:end;opacity:.8;filter:drop-shadow(0 0 27px #c4a06155)}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:23px}.btn{padding:13px 18px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid #4c4e54;background:#23272c;color:#eee}.btn.main{background:var(--gold);color:#201a12;border-color:var(--gold)}.btn:hover{filter:brightness(1.1)}.hint{margin-top:28px;padding:14px 0 0;border-top:1px solid #5f56454b;font-size:11px;color:#a6b0b9}.section{margin-top:40px}.section h2{margin:10px 0 15px;font-size:25px;letter-spacing:-.02em}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{min-height:195px;text-align:left;color:#f4f3f0;background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:20px;cursor:pointer}.card:hover{border-color:var(--gold)}.card i{color:var(--gold);font-size:25px;font-style:normal}.card h3{font-size:14px;margin:15px 0 8px}.card p{font-size:12px;color:var(--muted);line-height:1.7}.card .arrow{color:var(--gold);font-size:11px;font-weight:800}.cols{display:grid;grid-template-columns:1fr 1fr;gap:15px}.panel{border:1px solid var(--bd);background:var(--panel);border-radius:15px;padding:24px}.panel h2{font-size:22px}.panel p{line-height:1.75;font-size:12px;color:#aeb5c0}.panel label{display:block;font-weight:750;font-size:12px;margin:17px 0 8px}.panel input{padding:14px;color:white;background:#0a0d11;border:1px solid #3f4852;border-radius:9px;width:100%}.feedback{min-height:17px;color:#dfc08f!important}.footer{padding:20px 4%;border-top:1px solid #2d3035;display:flex;justify-content:space-between;gap:15px;font-size:10px;color:#808c9b}.toast{position:fixed;bottom:22px;right:22px;max-width:380px;padding:16px;background:#2a251d;border:1px solid #a08254;border-radius:12px;color:#f3dab3;z-index:10}.toast[hidden]{display:none}.btn:focus-visible,.nav:focus-visible,.card:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media(max-width:930px){.cards{grid-template-columns:repeat(2,1fr)}.hero-grid{grid-template-columns:1fr 120px}.hero-icon{width:110px}}
-@media(max-width:690px){.layout{display:block}.side{height:auto;position:static;width:auto;padding:13px 15px;border-right:0;border-bottom:1px solid #282b2f}.brand{padding:5px 0 12px}.side-foot,.menu-label{display:none}.side nav{display:flex;overflow:auto;gap:7px}.nav{white-space:nowrap;width:auto;margin:0;font-size:11px}.bar{height:48px}.hero{padding:25px}.hero-grid{display:block}.hero-icon{display:none}.hero h1{font-size:36px}.cards{grid-template-columns:1fr}.card{min-height:0}.cols{grid-template-columns:1fr}.footer{display:block;line-height:2}}
-</style></head><body>
-<div class="layout"><aside class="side"><div class="brand"><img src="../icon-192.png" alt="Black Owl"><div>BLACK OWL<small>PEOPLE DATA CENTER</small></div></div><div class="menu-label">WORKSPACE</div><nav aria-label="Navigasi"><button class="nav current" data-target="home">▦ &nbsp;Beranda</button><button class="nav" data-target="modules">▤ &nbsp;Modul People Data</button><button class="nav" data-target="connect">↗ &nbsp;Hubungkan Web App</button><button class="nav" data-target="install">↓ &nbsp;Instal PWA</button></nav><div class="side-foot"><b>BLACK OWL INTERNAL</b><br>HCGA & Legal Division<br>Data karyawan tidak dipublikasikan di sini</div></aside>
-<div class="content"><header class="bar"><span>Black Owl / <b id="breadcrumb">Beranda</b></span><span class="pill">PWA · PILOT</span></header><main>
-<section class="hero" id="home"><span class="eyebrow">HCGA & LEGAL · DIGITAL WORKSPACE</span><div class="hero-grid"><div><h1>Black Owl<br><em>People Data Center.</em></h1><p>Akses data karyawan, analisis SDM, monitoring kontrak, dan administrasi kepegawaian dalam sistem Black Owl.</p><div class="buttons"><button class="btn main" id="openApp">Buka People Data Center ↗</button><button class="btn" id="installApp">↓ Instal Aplikasi</button></div></div><img class="hero-icon" src="../icon-512.png" alt="" aria-hidden="true"></div><div class="hint" id="connectInfo">Masukkan URL Web App internal untuk menghubungkan aplikasi ini.</div></section>
-<section class="section" id="modules"><span class="eyebrow">AKSES CEPAT</span><h2>People Data Workspace</h2><div class="cards"><button class="card" data-open="1"><i>▦</i><h3>Main Dashboard</h3><p>Ringkasan karyawan aktif, lokasi, gender, grade dan masa kerja.</p><span class="arrow">Buka sistem →</span></button><button class="card" data-open="1"><i>▤</i><h3>Direktori Karyawan</h3><p>Pencarian profil dan informasi kepegawaian.</p><span class="arrow">Buka sistem →</span></button><button class="card" data-open="1"><i>◷</i><h3>Monitoring Kontrak</h3><p>Prioritas kontrak, PIC dan status tindak lanjut.</p><span class="arrow">Buka sistem →</span></button><button class="card" data-open="1"><i>⇧</i><h3>Import Data Karyawan</h3><p>Tambah data Excel melalui Web App perusahaan.</p><span class="arrow">Buka sistem →</span></button></div></section>
-<section class="section cols"><div class="panel" id="connect"><span class="eyebrow">KONFIGURASI</span><h2>Hubungkan Web App</h2><p>Salin alamat Google Apps Script <code>/exec</code> People Data Center Anda. PWA hanya menyimpan alamat pada perangkat, bukan database karyawan atau kredensial.</p><label for="url">URL Google Apps Script</label><input id="url" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" spellcheck="false"><div class="buttons"><button class="btn main" id="saveUrl">Simpan Alamat</button><button class="btn" id="removeUrl">Hapus</button></div><p class="feedback" id="feedback" aria-live="polite"></p></div>
-<div class="panel" id="install"><span class="eyebrow">INSTALL DI DESKTOP & HP</span><h2>Seperti TA & TM Workspace</h2><p>Gunakan tombol install atau menu Chrome/Edge <b>⋮ → Install page as app</b>. PWA mendapatkan icon Black Owl dan jendela standalone.</p><button class="btn main" id="installPanel">↓ Install People Data Center</button><p>Dashboard live tetap dibuka melalui Google Apps Script. Untuk memindahkan seluruh dashboard ke domain PWA, dibutuhkan API dan autentikasi backend terpisah.</p></div></section></main>
-<footer class="footer"><span>BLACK OWL INDONESIA · HCGA & LEGAL</span><span>Powered by HCGA & Legal Division</span></footer></div></div><div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script>
-(function(){
-"use strict";
-const KEY="blackowl.pdc.webapp.url.v1",el=id=>document.getElementById(id);
-const tell=message=>{const n=el("toast");n.textContent=message;n.hidden=false;setTimeout(()=>n.hidden=true,4000)};
-const valid=s=>{try{const u=new URL(s);return u.protocol==="https:"&&u.hostname==="script.google.com"&&u.pathname.startsWith("/macros/s/")&&u.pathname.endsWith("/exec")?u.href:null}catch{return null}};
-const current=()=>{try{return localStorage.getItem(KEY)||""}catch{return ""}};
-const refresh=()=>{const v=current();el("url").value=v;el("connectInfo").textContent=v?"Alamat sistem internal sudah tersimpan di perangkat ini.":"Hubungkan URL Web App perusahaan agar tombol akses bisa digunakan."};
-const openApp=()=>{const u=valid(current());if(!u){document.querySelector("#connect").scrollIntoView({behavior:"smooth"});tell("Simpan alamat Google Apps Script /exec dahulu.");return}window.open(u,"_blank","noopener,noreferrer")};
-document.querySelectorAll("[data-open]").forEach(x=>x.addEventListener("click",openApp));el("openApp").addEventListener("click",openApp);
-el("saveUrl").addEventListener("click",()=>{const u=valid(el("url").value.trim());if(!u){el("feedback").textContent="URL tidak sesuai. Gunakan alamat Web App /exec.";return}try{localStorage.setItem(KEY,u);el("feedback").textContent="Alamat berhasil disimpan.";refresh();tell("People Data Center sudah terhubung.")}catch{el("feedback").textContent="Browser tidak mengizinkan penyimpanan lokal."}});
-el("removeUrl").addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch{}refresh();el("feedback").textContent="Alamat telah dihapus."});
-document.querySelectorAll("[data-target]").forEach(x=>x.addEventListener("click",()=>{document.getElementById(x.dataset.target).scrollIntoView({behavior:"smooth"});document.querySelectorAll("[data-target]").forEach(y=>y.classList.remove("current"));x.classList.add("current");el("breadcrumb").textContent=x.textContent.trim()}));
-let promptEvent=null;
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();promptEvent=e});
-const install=async()=>{if(promptEvent){promptEvent.prompt();await promptEvent.userChoice;promptEvent=null}else tell("Chrome/Edge: ⋮ → Install page as app. Android: Add to Home Screen.")};
-el("installApp").addEventListener("click",install);el("installPanel").addEventListener("click",install);
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js",{scope:"./"}).catch(()=>{}))}
-refresh();
-})();
-</script></body></html>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><img src="../icon-192.png" alt="Logo Black Owl"><div><strong>BLACK OWL</strong><span>PEOPLE DATA CENTER</span></div></div>
+    <div class="sidebar-heading">WORKSPACE</div>
+    <nav aria-label="Menu aplikasi">
+      <button class="nav-link selected" type="button" data-go="home"><span class="nav-icon">▦</span> Beranda</button>
+      <a class="nav-link" href="./live/"><span class="nav-icon">▤</span> Dashboard PWA</a>
+      <button class="nav-link" type="button" data-go="modules"><span class="nav-icon">▤</span> Modul People Data</button>
+      <button class="nav-link" type="button" data-go="connect"><span class="nav-icon">↗</span> Hubungkan Web App</button>
+      <button class="nav-link" type="button" data-go="install"><span class="nav-icon">↓</span> Instal PWA</button>
+    </nav>
+    <div class="side-footer"><span class="live-dot"></span> Black Owl Internal<br><small>HCGA & Legal Division<br>Data karyawan tidak disimpan offline</small></div>
+  </aside>
+  <div class="main-shell">
+    <header class="topbar"><span class="breadcrumbs">Black Owl <span class="chevron">/</span> <b id="crumb">Beranda</b></span><span class="status"><span class="live-dot"></span> <span id="networkText">Memeriksa koneksi</span></span></header>
+    <main id="content">
+      <section class="hero" id="home">
+        <div class="hero-top"><span class="eyebrow">HCGA & LEGAL · DIGITAL WORKSPACE</span><span class="pill">PWA · PILOT</span></div>
+        <div class="hero-grid"><div><h1>Black Owl<br><em>People Data Center.</em></h1><p>Pusat akses data karyawan, analisis SDM, monitoring kontrak, dan pengelolaan informasi kepegawaian.</p>
+        <div class="actions"><a class="btn primary" href="./live/">Buka Dashboard di PWA <span>↗</span></a><button type="button" class="btn secondary" id="openMain">Web App Lama <span>↗</span></button><button type="button" class="btn secondary" id="installMain">↓ Instal Aplikasi</button></div></div>
+        <div class="hero-mark" aria-hidden="true"><img src="../icon-512.png" alt=""></div></div>
+        <div class="hero-bottom"><span><span class="live-dot"></span> Terhubung ke Web App perusahaan</span><span id="linkStatus">Alamat belum disetel di perangkat ini</span></div>
+      </section>
+      <section class="section" id="modules"><div class="section-head"><div><span class="eyebrow">AKSES MODUL</span><h2>People Data Workspace</h2><p>Tampilan dashboard dapat dioperasikan langsung di PWA; data tetap berada di Google Sheets perusahaan.</p></div></div>
+        <div class="module-grid">
+          <a class="module" href="./live/?view=overview"><span class="module-symbol">▦</span><h3>Main Dashboard</h3><p>Ringkasan data karyawan aktif, lokasi kerja, gender, masa kerja, dan jabatan.</p><span class="link-text">Buka di PWA →</span></a>
+          <a class="module" href="./live/?view=directory"><span class="module-symbol">▤</span><h3>Direktori Karyawan</h3><p>Cari profil dan informasi karyawan berdasarkan sumber data internal.</p><span class="link-text">Buka di PWA →</span></a>
+          <a class="module" href="./live/?view=contracts"><span class="module-symbol">◷</span><h3>Monitoring Kontrak</h3><p>Tindak lanjut masa berlaku kontrak, PIC, status proses, dan catatan HC.</p><span class="link-text">Buka di PWA →</span></a>
+          <a class="module" href="./live/?view=import"><span class="module-symbol">⇧</span><h3>Import Data Karyawan</h3><p>Upload Excel dan pengelolaan data sumber melalui aplikasi utama.</p><span class="link-text">Buka di PWA →</span></a>
+        </div>
+      </section>
+      <div class="section two-col">
+        <section class="panel" id="connect"><span class="eyebrow">KONFIGURASI AWAL · SATU KALI</span><h2>Hubungkan Web App</h2><p>Masukkan URL <code>/exec</code> dari Black Owl People Data Center yang sudah berjalan. PWA ini menyimpan <b>alamatnya saja</b> di perangkat Anda, bukan data karyawan, password, atau token.</p>
+          <label for="webappUrl">URL Google Apps Script</label><input id="webappUrl" type="url" inputmode="url" spellcheck="false" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+          <div class="inline-actions"><button type="button" class="btn secondary" id="saveUrl">Simpan Alamat</button><button type="button" class="btn subtle" id="clearUrl">Hapus</button></div><p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        </section>
+        <section class="panel" id="install"><span class="eyebrow">INSTALL DI WINDOWS / ANDROID</span><h2>Seperti TA & TM Workspace</h2><p>Instal PWA ini melalui browser Chrome atau Edge. Aplikasi akan muncul dengan icon Black Owl dan dapat dipin ke desktop atau taskbar.</p>
+          <button type="button" class="btn primary" id="installPanel">↓ Install People Data Center</button>
+          <p class="note">Jika tombol install belum tersedia, buka menu browser <b>⋮ → Install page as app</b> atau <b>Add to Home Screen</b> di Android.</p>
+          <p class="note">Dashboard PWA terintegrasi dapat dibuka langsung dari menu. Konfigurasi Google OAuth dan API dibutuhkan sebelum data live tersedia.</p>
+        </section>
+      </div>
+    </main>
+    <footer class="footer"><span>BLACK OWL INDONESIA · HCGA & LEGAL</span><span>People Data Center PWA · Powered by HCGA & Legal Division</span></footer>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
