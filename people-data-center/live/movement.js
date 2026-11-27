@@ -146,8 +146,8 @@ async function onFile(files){
 }
 function reviewCsv(){
  if(!staged.length)return;
- const rows=[['File','Tab Sumber','Baris','Nama Karyawan','Employee ID pada File','Unit','Posisi','Last Day','Kategori Sumber','Exit Interview','ID Master Cocok','Hasil Pencocokan','Tindak Lanjut']];
- for(const r of staged)rows.push([r.file,r.sheet,r.row,r.name,r.employeeId,r.unit,r.position,r.effectiveDate,r.reason,r.exit,r.match?.employeeId||'',r.kind,r.message]);
+ const rows=[['File','Tab Sumber','Baris','Nama Karyawan','Employee ID pada File','Unit','Posisi','Last Day','Kategori Sumber','Exit Interview','ID Master Cocok','Status Tujuan','Hasil Pencocokan','Tindak Lanjut']];
+ for(const r of staged)rows.push([r.file,r.sheet,r.row,r.name,r.employeeId,r.unit,r.position,r.effectiveDate,r.reason,r.exit,r.match?.employeeId||'',$('movementTarget')?.value||'Nonaktif',r.kind,r.message]);
  const q=v=>{let x=String(v??'');if(/^[=+@\-\t\r]/.test(x))x="'"+x;return '"'+x.replaceAll('"','""')+'"';};
  const data='\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n');
  const b=new Blob([data],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
@@ -165,11 +165,12 @@ async function apply(){
  if(busy||!admin)return;
  const picked=staged.filter(r=>r.kind==='ready'&&r.checked&&r.match);
  if(!picked.length)return;
- if(!confirm('Konfirmasi perubahan status '+picked.length+' karyawan menjadi NONAKTIF? Status akan mengurangi Actual Manpower dan tidak dapat dibatalkan otomatis. Simpan laporan review sebagai bukti Last Day.'))return;
+ const status=$('movementTarget')?.value==='Resign'?'Resign':'Nonaktif';
+ if(!confirm('Konfirmasi perubahan status '+picked.length+' karyawan menjadi '+status.toUpperCase()+'? Status akan mengurangi Actual Manpower dan tidak dapat dibatalkan otomatis. Simpan laporan review sebagai bukti Last Day.'))return;
  reviewCsv();
  busy=true;render();let done=0,failed=0;
  for(const r of picked){
-  try{await rpc(r.match.uid,'Nonaktif');appliedInSession.add(r.match.uid);done++;r.kind='already';r.checked=false;r.message='Status berhasil diperbarui pada database (waktu update tercatat di RIWAYAT_VALIDASI).';}
+  try{await rpc(r.match.uid,status);appliedInSession.add(r.match.uid);done++;r.kind='already';r.checked=false;r.message='Status berhasil diperbarui pada database (waktu update tercatat di RIWAYAT_VALIDASI).';}
   catch(e){failed++;r.checked=false;r.kind='review';r.message='Update gagal: '+String(e.message).slice(0,120);}
   $('movementApplyProgress').textContent='Memproses '+(done+failed)+' dari '+picked.length+' • berhasil '+done+' • gagal '+failed;
  }
