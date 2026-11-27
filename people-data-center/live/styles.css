@@ -75,3 +75,5 @@
 .mov-table td{vertical-align:top}.mov-table td:first-child input{accent-color:#d0ac75;width:17px;height:17px}.mov-table .muted{max-width:290px}
 .mov-progress{color:#dfc18f;padding:12px 0;font-size:12px;min-height:20px}.mov-progress button{margin-left:10px}
 @media(max-width:1050px){.mov-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.mov-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.mov-table{min-width:820px}}
+
+.mov-target-label{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#b7c0c8;font-weight:700}.mov-target-label select{background:#14191f;color:#eddfc8;border:1px solid #6e5633;border-radius:8px;padding:9px 12px;font:inherit;cursor:pointer}@media(max-width:640px){.mov-target-label{width:100%;justify-content:space-between}}
