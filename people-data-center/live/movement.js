@@ -8,6 +8,7 @@ const norm=x=>String(x??'').normalize('NFKD').toUpperCase().replace(/[^A-Z0-9]/g
 const tidy=x=>String(x??'').trim();
 const today=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Jakarta'});
 let roster=[],admin=false,staged=[],busy=false,reportDownloaded=false;
+const appliedInSession=new Set();
 function dateValue(v){
  const s=tidy(v);
  if(/^[0-9]{5}(?:\.[0-9]+)?$/.test(s)&&Number(s)>25000&&Number(s)<80000)return new Date(Date.UTC(1899,11,30)+Number(s)*86400000).toISOString().slice(0,10);
@@ -95,6 +96,7 @@ function classify(){
    row.checked=false;continue;
   }
   const match=possible[0];row.match=match;
+  if(appliedInSession.has(match.uid)){row.kind='already';row.message='Status sudah diperbarui dalam sesi ini; muat ulang dashboard.';row.checked=false;continue;}
   const st=norm(match.status);
   if(['RESIGN','RESIGNED','NONAKTIF','TIDAKAKTIF','INACTIVE','TERMINATED','PHK'].includes(st)){
    row.kind='already';row.message='Record ini sudah berstatus tidak aktif.';row.checked=false;continue;
@@ -167,7 +169,7 @@ async function apply(){
  reviewCsv();
  busy=true;render();let done=0,failed=0;
  for(const r of picked){
-  try{await rpc(r.match.uid,'Nonaktif');done++;r.kind='already';r.checked=false;r.message='Status berhasil diperbarui pada database (waktu update tercatat di RIWAYAT_VALIDASI).';}
+  try{await rpc(r.match.uid,'Nonaktif');appliedInSession.add(r.match.uid);done++;r.kind='already';r.checked=false;r.message='Status berhasil diperbarui pada database (waktu update tercatat di RIWAYAT_VALIDASI).';}
   catch(e){failed++;r.checked=false;r.kind='review';r.message='Update gagal: '+String(e.message).slice(0,120);}
   $('movementApplyProgress').textContent='Memproses '+(done+failed)+' dari '+picked.length+' • berhasil '+done+' • gagal '+failed;
  }
