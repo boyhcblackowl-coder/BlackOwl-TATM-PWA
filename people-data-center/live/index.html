@@ -118,14 +118,14 @@
     <div class="section-head"><div><h3>Hasil Pemeriksaan Movement</h3>
       <p>Hanya kecocokan yang kuat dapat dipilih untuk perubahan status. Semua perubahan memerlukan persetujuan Admin.</p></div>
      <div class="intro-actions"><button class="btn" id="movementSelectReady" type="button" disabled>Pilih Semua yang Cocok</button>
-     <button class="btn primary" id="movementConfirm" type="button" disabled>Update Status → Nonaktif</button></div>
+     <label class="mov-target-label">Status tujuan <select id="movementTarget" aria-label="Status kepegawaian tujuan"><option value="Nonaktif">Nonaktif</option><option value="Resign">Resign</option></select></label><button class="btn primary" id="movementConfirm" type="button" disabled>Terapkan Status Terpilih</button></div>
     </div>
     <div id="movementPreview" class="card panel"><div class="empty">Belum ada file movement yang diunggah.</div></div>
     <div class="mov-progress" id="movementApplyProgress" aria-live="polite"></div>
     <div class="card panel" style="margin-top:18px">
      <div class="panelhead"><div><div class="panel-title">Ketentuan Pembaruan</div><div class="panel-sub">Kontrol keamanan dan keakuratan data karyawan</div></div></div>
      <p class="minor">Baris yang sudah berstatus Resign/Nonaktif akan dilewati agar upload bulanan tidak menggandakan perubahan. Baris yang tidak cocok, memiliki nama terlalu singkat, berbeda outlet/posisi, atau Last Day belum efektif harus diperiksa melalui Direktori Karyawan terlebih dahulu.</p>
-     <p class="minor">Setelah disahkan, status berubah menjadi <strong>Nonaktif</strong>; jumlah karyawan Aktif dan Actual Manpower di Main Dashboard serta Breakdown MPP menyesuaikan setelah halaman dimuat ulang. Log perubahan status tetap tersimpan pada tab <strong>RIWAYAT_VALIDASI</strong>.</p>
+     <p class="minor">Setelah disahkan, status berubah menjadi <strong>Resign atau Nonaktif</strong> sesuai pilihan Admin; jumlah karyawan Aktif dan Actual Manpower di Main Dashboard serta Breakdown MPP menyesuaikan setelah halaman dimuat ulang. Log perubahan status tetap tersimpan pada tab <strong>RIWAYAT_VALIDASI</strong>.</p>
     </div>
    </div>
    <div class="view" id="view-contracts">
@@ -186,7 +186,7 @@
 <script src="./auth.js"></script>
 <script src="./bridge.js"></script>
 <script src="./mpp-breakdown.js?v=20261125-2"></script>
-<script src="./movement.js?v=20261127-1"></script>
+<script src="./movement.js?v=20261127-2"></script>
 <script src="./dashboard-app.js?v=20261127-movement1"></script>
 </body>
 </html>
