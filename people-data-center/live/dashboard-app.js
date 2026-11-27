@@ -19,7 +19,7 @@ let CAN_EDIT=!SERVER_MODE;
 let records=initial.map(r=>({...r}));
  let contractTracking=[],monitoringReady=!SERVER_MODE,contractTab='need',contractPage=1,contractLastSync=null;
 let scope='overall',view='overview',dirPage=1,staged=[],stageFiles=[],importHistory=[],toastTimer=null;
-const viewNames={overview:'Main Dashboard',directory:'Direktori Karyawan',analytics:'Analisis SDM',mpp:'Breakdown MPP',contracts:'Monitoring Kontrak',import:'Import Data Karyawan',quality:'Pemeriksaan Data',sources:'Sumber Data',roadmap:'Pengembangan Berikutnya'};
+const viewNames={overview:'Main Dashboard',directory:'Direktori Karyawan',analytics:'Analisis SDM',mpp:'Breakdown MPP',movement:'Movement Karyawan',contracts:'Monitoring Kontrak',import:'Import Data Karyawan',quality:'Pemeriksaan Data',sources:'Sumber Data',roadmap:'Pengembangan Berikutnya'};
 /* Status berasal dari daftar Excel: sumber awal tidak memuat status eksplisit.
  * Belum divalidasi / kosong pada roster lama diperlakukan Aktif (asumsi operasional dari roster).
  * Status nonaktif hanya jika telah ditetapkan melalui import berkolom status atau Admin HC.
@@ -106,7 +106,7 @@ function barList(el,arr,opts={}){const rows=Array.isArray(arr)?arr:Object.entrie
 const kpi=(label,num,foot,ico='users')=>`<article class="card kpi"><div class="kpi-header"><span>${esc(label)}</span><span class="kpi-icon">${icon(ico)}</span></div><div class="kpi-num">${fmt(num)}</div><div class="kpi-foot">${foot}</div></article>`;
 function setScope(s){scope=s;dirPage=1;document.querySelectorAll('[data-scope]').forEach(btn=>btn.classList.toggle('active',btn.dataset.scope===scope));renderAll();}
 function showView(v,requestedScope){if(!viewNames[v])return;if(requestedScope)scope=requestedScope;else if(v==='overview')scope='overall';view=v;document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+v));document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v && (el.dataset.defaultScope?scope===el.dataset.defaultScope:(v!=='directory'||scope!=='inactive'))));document.querySelectorAll('[data-scope]').forEach(el=>el.classList.toggle('active',el.dataset.scope===scope));$('crumb').textContent=viewNames[v];$('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'});renderAll();}
-function renderAll(){renderOverview();renderDirectory();renderAnalytics();window.PDC_MPP?.render(reconciliation().master.filter(r=>operationalStatus(r)==='Aktif'),CAN_EDIT);renderContracts();renderQuality();renderSources();renderRoadmap();}
+function renderAll(){renderOverview();renderDirectory();renderAnalytics();window.PDC_MPP?.render(reconciliation().master.filter(r=>operationalStatus(r)==='Aktif'),CAN_EDIT);window.PDC_MOVEMENT?.refresh(reconciliation().master,CAN_EDIT);renderContracts();renderQuality();renderSources();renderRoadmap();}
 function renderOverview(){
  const a=list(), rec=reconciliation(), g=group(a,'gender'),known=(g.Male||0)+(g.Female||0),units=Object.keys(group(a,'unit')).filter(x=>x!=='Belum diisi').length;
  $('overviewKpis').classList.toggle('kpis-three', scope==='overall');
@@ -183,6 +183,35 @@ function dom(str){const doc=new DOMParser().parseFromString(str,'application/xml
 function xmlTexts(parent){return [...parent.getElementsByTagName('t')].map(t=>t.textContent||'').join('');}
 async function unzipEntry(zbytes,target){const dv=new DataView(zbytes.buffer,zbytes.byteOffset,zbytes.byteLength);let e=-1;for(let p=zbytes.length-22;p>=Math.max(0,zbytes.length-66000);p--){if(dv.getUint32(p,true)===0x06054b50){e=p;break;}}if(e<0)throw Error('File bukan .xlsx valid (ZIP signature not found).');let count=dv.getUint16(e+10,true),cursor=dv.getUint32(e+16,true);const decoder=new TextDecoder('utf-8');for(let j=0;j<count;j++){if(dv.getUint32(cursor,true)!==0x02014b50)throw Error('ZIP central directory invalid');const method=dv.getUint16(cursor+10,true),size=dv.getUint32(cursor+20,true),nameLen=dv.getUint16(cursor+28,true),extra=dv.getUint16(cursor+30,true),comment=dv.getUint16(cursor+32,true),local=dv.getUint32(cursor+42,true);const name=decoder.decode(zbytes.subarray(cursor+46,cursor+46+nameLen));if(name===target){const localName=dv.getUint16(local+26,true),localExtra=dv.getUint16(local+28,true),start=local+30+localName+localExtra,bytes=zbytes.slice(start,start+size);if(method===0)return decoder.decode(bytes);if(method===8){if(!('DecompressionStream' in window))throw Error('Browser belum mendukung decompression Excel. Gunakan CSV.');try{const blob=new Blob([bytes]);const stream=blob.stream().pipeThrough(new DecompressionStream('deflate-raw'));return await new Response(stream).text();}catch(e){throw Error('Excel ZIP gagal diekstrak di browser ini; gunakan CSV. '+e.message);}}throw Error('Compression Excel tidak didukung: '+method);}cursor+=46+nameLen+extra+comment;}return null;}
 async function parseXlsx(bytes){const z=new Uint8Array(bytes);const sharedStr=await unzipEntry(z,'xl/sharedStrings.xml');let ss=[];if(sharedStr){const doc=dom(sharedStr);ss=[...doc.getElementsByTagName('si')].map(xmlTexts);}let sheet=await unzipEntry(z,'xl/worksheets/sheet1.xml');if(!sheet)throw Error('Tab pertama pada workbook tidak ditemukan.');let doc=dom(sheet),rows=[];for(const row of doc.getElementsByTagName('row')){const a=[];for(const c of row.getElementsByTagName('c')){const idx=colIdx(c.getAttribute('r')||'A'),t=c.getAttribute('t')||'';let v='';if(t==='inlineStr'){v=xmlTexts(c);}else{v=c.getElementsByTagName('v')[0]?.textContent??'';if(t==='s')v=ss[Number(v)]??'';if(t==='b')v=v==='1'?'TRUE':'FALSE';}a[idx]=v;}rows.push(a);}return rows;}
+/* Read all tabs in a monthly XLSX, purely in the browser. */
+window.PDC_PARSE_MOVEMENT_XLSX=async function(bytes){
+ const z=new Uint8Array(bytes);
+ const strings=await unzipEntry(z,'xl/sharedStrings.xml');
+ const shared=strings?[...dom(strings).getElementsByTagName('si')].map(xmlTexts):[];
+ const wbxml=await unzipEntry(z,'xl/workbook.xml');
+ const names=wbxml?[...dom(wbxml).getElementsByTagName('sheet')].map(s=>s.getAttribute('name')||''):[];
+ const out=[];
+ for(let si=1;si<=Math.min(24,Math.max(1,names.length));si++){
+  const xml=await unzipEntry(z,'xl/worksheets/sheet'+si+'.xml');
+  if(!xml)continue;
+  const rows=[];
+  for(const row of dom(xml).getElementsByTagName('row')){
+   const values=[];
+   for(const c of row.getElementsByTagName('c')){
+    const idx=colIdx(c.getAttribute('r')||'A');
+    const t=c.getAttribute('t')||'';
+    let v=t==='inlineStr'?xmlTexts(c):(c.getElementsByTagName('v')[0]?.textContent??'');
+    if(t==='s')v=shared[Number(v)]??'';
+    if(t==='b')v=v==='1'?'TRUE':'FALSE';
+    values[idx]=v;
+   }
+   rows.push(values);
+  }
+  out.push({name:names[si-1]||'Sheet '+si,rows});
+ }
+ if(!out.length)throw Error('Tidak ada tab Excel yang dapat dibaca.');
+ return out;
+};
 function keyOf(h){return norm(h)}
 const FIELD_KEYS={name:['NAMAKARYAWAN','NAMALENGKAP','EMPLOYEENAME','NAMA','NAME'],employeeId:['NOINDUKKARYAWAN','EMPLOYEEID','KODEKARYAWAN','NIKKARYAWAN','NOEMPLOYEE','EMPID'],gender:['JENISKELAMIN','GENDER','SEX'],unit:['LOKASIKERJA','OUTLETHOLDING','UNIT','OUTLET','PLACEMENT','PENEMPATAN','WORKLOCATION'],pt:['PT','NAMAPT','LEGALENTITY','PERUSAHAAN','PTLEGAL'],department:['NAMADEPARTEMEN','DEPARTEMENT','DEPARTMENT','DEPT'],position:['NAMAPOSISI','POSISI','POSITION','JABATAN'],grade:['NAMALEVEL','GRADING','GRADE','LEVEL'],joinDate:['TGLMASUK','JOINDATE','TANGGALBERGABUNG','TANGGALMASUK','STARTDATE'],contractEnd:['TGLKONTRAKSELESAI','CONTRACTEND','CONTRACTENDDATE','TGLAKHIRKONTRAK'],status:['STATUSKARYAWAN','EMPLOYEESTATUS','STATUSKEPEGAWAIAN']};
 function fieldIndex(h,key){const arr=FIELD_KEYS[key]||[];return h.findIndex(v=>arr.includes(keyOf(v)));}
@@ -205,7 +234,7 @@ async function stageFilesUpload(files){if(!files.length)return;let all=[],errors
 
 function serverRpc(method, ...args){return new Promise((resolve,reject)=>{if(!SERVER_MODE)return reject(Error('Tidak terhubung ke Web App.'));const api=window.google?.script?.run;if(!api)return reject(Error('API Google Apps Script tidak tersedia. Buka URL /exec Web App terbaru, bukan file HTML atau /dev yang salah.'));const runner=api.withSuccessHandler(resolve).withFailureHandler(error=>reject(Error(error?.message||String(error))));if(method==='getBootstrap')runner.getBootstrap();else if(method==='saveImport')runner.saveImport(args[0],args[1]);else if(method==='setEmployeeValidation')runner.setEmployeeValidation(args[0],args[1],args[2]);else if(method==='getContractTracking')runner.getContractTracking();else if(method==='saveContractFollowUp')runner.saveContractFollowUp(args[0]);else reject(Error('Metode tidak diizinkan'));});}
 function setAccessAlert(text){const node=$('accessAlert');if(!node)return;node.textContent=text||'';node.classList.toggle('active',Boolean(text));}
-async function loadServerData(){if(!SERVER_MODE)return;try{setAccessAlert('Memuat data karyawan dari database internal...');const result=await serverRpc('getBootstrap');if(!result||!result.ok)throw Error('Gagal memuat data.');initial=result.records||[];records=initial.map(r=>({...r}));reconcileCache=null;CAN_EDIT=Boolean(result.canEdit);importHistory=result.importHistory||[];contractTracking=result.contractTracking||[];monitoringReady=Boolean(result.monitoringReady);contractLastSync=new Date();$('commitImport').disabled=!CAN_EDIT;$('commitImport').title=CAN_EDIT?'':'Akses import hanya untuk admin HCGA & Legal';$('resetDataButton').disabled=true;$('resetDataButton').title='Reset tidak tersedia pada database utama';document.querySelectorAll('[data-action="export"]').forEach(el=>el.style.display=result.canExport?'':'none');setAccessAlert('');$('appBootStatus').style.display='none';$('importFileStatus').textContent=CAN_EDIT?'Akses Admin HCGA & Legal. Import dapat disimpan.':'Akses hanya melihat data. Import tidak diizinkan.';renderAll();renderImportHistory();toast('Data karyawan berhasil dimuat dari Google Sheets.');const requested=new URLSearchParams(location.search).get('view');if(['overview','directory','analytics','mpp','contracts','import','quality','sources','roadmap'].includes(requested))showView(requested);}catch(e){CAN_EDIT=false;records=[];reconcileCache=null;setAccessAlert('Akses data tidak tersedia: '+e.message+'. Pastikan akun Anda masuk daftar pengguna dan Web App tidak dibagikan secara publik.');$('appBootStatus').classList.add('error');$('appBootStatus').textContent='Database belum dapat dimuat: '+e.message;console.error('Black Owl PDC getBootstrap:',e);try{renderAll();}catch(renderError){console.error('Dashboard render error:',renderError);}}}
+async function loadServerData(){if(!SERVER_MODE)return;try{setAccessAlert('Memuat data karyawan dari database internal...');const result=await serverRpc('getBootstrap');if(!result||!result.ok)throw Error('Gagal memuat data.');initial=result.records||[];records=initial.map(r=>({...r}));reconcileCache=null;CAN_EDIT=Boolean(result.canEdit);importHistory=result.importHistory||[];contractTracking=result.contractTracking||[];monitoringReady=Boolean(result.monitoringReady);contractLastSync=new Date();$('commitImport').disabled=!CAN_EDIT;$('commitImport').title=CAN_EDIT?'':'Akses import hanya untuk admin HCGA & Legal';$('resetDataButton').disabled=true;$('resetDataButton').title='Reset tidak tersedia pada database utama';document.querySelectorAll('[data-action="export"]').forEach(el=>el.style.display=result.canExport?'':'none');setAccessAlert('');$('appBootStatus').style.display='none';$('importFileStatus').textContent=CAN_EDIT?'Akses Admin HCGA & Legal. Import dapat disimpan.':'Akses hanya melihat data. Import tidak diizinkan.';renderAll();renderImportHistory();toast('Data karyawan berhasil dimuat dari Google Sheets.');const requested=new URLSearchParams(location.search).get('view');if(['overview','directory','analytics','mpp','movement','contracts','import','quality','sources','roadmap'].includes(requested))showView(requested);}catch(e){CAN_EDIT=false;records=[];reconcileCache=null;setAccessAlert('Akses data tidak tersedia: '+e.message+'. Pastikan akun Anda masuk daftar pengguna dan Web App tidak dibagikan secara publik.');$('appBootStatus').classList.add('error');$('appBootStatus').textContent='Database belum dapat dimuat: '+e.message;console.error('Black Owl PDC getBootstrap:',e);try{renderAll();}catch(renderError){console.error('Dashboard render error:',renderError);}}}
 
 async function commitImport(){
  if(SERVER_MODE && !CAN_EDIT)return toast('Akses import hanya untuk admin HCGA & Legal.');
