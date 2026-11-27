@@ -11,7 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../../icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="../../icon-180.png">
-<link rel="stylesheet" href="./styles.css?v=20261125-mpp2">
+<link rel="stylesheet" href="./styles.css?v=20261127-movement1">
 </head>
 <body>
 <div class="app">
@@ -24,6 +24,7 @@
    <button data-view="directory" data-default-scope="inactive"><span class="ico" data-icon="shield"></span>Karyawan Tidak Aktif</button>
    <button data-view="analytics"><span class="ico" data-icon="chart"></span>Analisis SDM</button>
    <button data-view="mpp"><span class="ico" data-icon="briefcase"></span>Breakdown MPP</button>
+   <button data-view="movement"><span class="ico" data-icon="users"></span>Movement Karyawan <span class="nav-count">BULANAN</span></button>
     <button data-view="contracts"><span class="ico" data-icon="calendar"></span>Monitoring Kontrak <span class="nav-count" id="contractNavCount">—</span></button>
    <button data-view="import"><span class="ico" data-icon="upload"></span>Import Data Karyawan <span class="nav-count">BARU</span></button>
    <button data-view="quality"><span class="ico" data-icon="shield"></span>Pemeriksaan Data</button>
@@ -97,6 +98,36 @@
     <div class="section-head"><div><h3>Pilih Outlet / Unit Bisnis</h3><p>Distribusi jumlah karyawan aktif masing-masing outlet.</p></div></div><div class="mpp-cards" id="mppCards"></div>
     <div class="section-head"><div><h3>Rincian Departemen dan Posisi</h3><p id="mppDescription">Rincian Actual per jabatan.</p></div></div><div id="mppDetails" class="mpp-details"></div>
    </div>
+
+   <div class="view" id="view-movement">
+    <div class="intro">
+     <div><div class="eyebrow">HCGA &amp; LEGAL • REKAP BULANAN</div><h1 class="page-title">Movement Karyawan</h1>
+      <p>Upload data resign / nonaktif setiap bulan untuk memperbarui status karyawan yang sudah ada. Preview dan pencocokan dilakukan sebelum Admin menyetujui perubahan.</p></div>
+     <div class="intro-actions"><button class="btn" id="movementExport" type="button" disabled>Unduh Hasil Review CSV</button></div>
+    </div>
+    <div class="note"><span class="ico" data-icon="alert"></span><div>
+      <strong>Movement bukan import karyawan baru.</strong> Data dari Excel dicocokkan ke master dengan Employee ID (jika tersedia), nama, unit, dan posisi. Karyawan yang tidak ditemukan tidak otomatis dibuat. Bukti tanggal <strong>Last Day</strong> harus disimpan dari laporan review karena API saat ini hanya mencatat perubahan status, belum mencatat tanggal efektif resign pada database.
+    </div></div>
+    <section class="card panel">
+     <div class="panelhead"><div><div class="panel-title">Upload Rekap Movement Bulanan</div><div class="panel-sub">Mendukung file .xlsx dengan beberapa tab, termasuk format rekap November 2026 yang Anda lampirkan</div></div></div>
+     <label class="mov-upload"><span>File Excel / CSV</span><input type="file" id="movementUpload" accept=".xlsx,.csv" multiple disabled /></label>
+     <p class="minor" id="movementAccess">Memeriksa hak akses Admin HCGA &amp; Legal...</p>
+     <p class="minor" id="movementStatus">Pilih file .xlsx atau .csv dari rekap movement bulanan.</p>
+    </section>
+    <div class="mov-stats" id="movementStats"></div>
+    <div class="section-head"><div><h3>Hasil Pemeriksaan Movement</h3>
+      <p>Hanya kecocokan yang kuat dapat dipilih untuk perubahan status. Semua perubahan memerlukan persetujuan Admin.</p></div>
+     <div class="intro-actions"><button class="btn" id="movementSelectReady" type="button" disabled>Pilih Semua yang Cocok</button>
+     <button class="btn primary" id="movementConfirm" type="button" disabled>Update Status → Nonaktif</button></div>
+    </div>
+    <div id="movementPreview" class="card panel"><div class="empty">Belum ada file movement yang diunggah.</div></div>
+    <div class="mov-progress" id="movementApplyProgress" aria-live="polite"></div>
+    <div class="card panel" style="margin-top:18px">
+     <div class="panelhead"><div><div class="panel-title">Ketentuan Pembaruan</div><div class="panel-sub">Kontrol keamanan dan keakuratan data karyawan</div></div></div>
+     <p class="minor">Baris yang sudah berstatus Resign/Nonaktif akan dilewati agar upload bulanan tidak menggandakan perubahan. Baris yang tidak cocok, memiliki nama terlalu singkat, berbeda outlet/posisi, atau Last Day belum efektif harus diperiksa melalui Direktori Karyawan terlebih dahulu.</p>
+     <p class="minor">Setelah disahkan, status berubah menjadi <strong>Nonaktif</strong>; jumlah karyawan Aktif dan Actual Manpower di Main Dashboard serta Breakdown MPP menyesuaikan setelah halaman dimuat ulang. Log perubahan status tetap tersimpan pada tab <strong>RIWAYAT_VALIDASI</strong>.</p>
+    </div>
+   </div>
    <div class="view" id="view-contracts">
     <div class="intro"><div><div class="eyebrow">HCGA &amp; LEGAL · PEMANTAUAN DOKUMEN</div><h1 class="page-title">Monitoring Kontrak Karyawan</h1><p>Pantau tanggal akhir kontrak yang tercatat, PIC, progres, dan target tindak lanjut. Periksa PKWT terbaru sebelum mengambil keputusan. Karyawan tidak aktif tidak masuk ke daftar prioritas aktif.</p></div><div class="intro-actions"><button class="btn" id="refreshContracts">↻ Refresh Data</button><button class="btn" id="exportContracts">Unduh Monitoring CSV</button></div></div>
     <div class="note"><span class="ico" data-icon="alert"></span><div><strong>Monitoring ≠ status hukum kontrak.</strong> Data tanggal kontrak yang lewat belum tentu berarti hubungan kerja berakhir. Lakukan pemeriksaan PKWT terbaru dan status karyawan sebelum menindaklanjuti. Perubahan pada menu ini tidak mengubah file sumber.</div></div>
@@ -155,6 +186,7 @@
 <script src="./auth.js"></script>
 <script src="./bridge.js"></script>
 <script src="./mpp-breakdown.js?v=20261125-2"></script>
-<script src="./dashboard-app.js?v=20261125-mpp1"></script>
+<script src="./movement.js?v=20261127-1"></script>
+<script src="./dashboard-app.js?v=20261127-movement1"></script>
 </body>
 </html>
